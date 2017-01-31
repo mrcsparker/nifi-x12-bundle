@@ -34,6 +34,7 @@ import org.milyn.Smooks;
 import org.milyn.container.ExecutionContext;
 import org.milyn.smooks.edi.EDIReaderConfigurator;
 
+import java.io.InputStream;
 import java.util.*;
 
 @Tags({"ansi", "edi", "x12"})
@@ -93,6 +94,7 @@ public class X12Processor extends AbstractProcessor {
         }
         // [TODO] implement
 
+        InputStream input = session.read(flowFile);
 
         System.out.println("Received a flow file");
         session.transfer(flowFile, MY_RELATIONSHIP);
