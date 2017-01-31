@@ -30,15 +30,18 @@ import org.apache.nifi.annotation.documentation.SeeAlso;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.processor.exception.ProcessException;
 import org.apache.nifi.processor.util.StandardValidators;
+import org.milyn.Smooks;
+import org.milyn.container.ExecutionContext;
+import org.milyn.smooks.edi.EDIReaderConfigurator;
 
 import java.util.*;
 
-@Tags({"example"})
-@CapabilityDescription("Provide a description")
+@Tags({"ansi", "edi", "x12"})
+@CapabilityDescription("EDI X12 Processor")
 @SeeAlso({})
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({@WritesAttribute(attribute="", description="")})
-public class MyProcessor extends AbstractProcessor {
+public class X12Processor extends AbstractProcessor {
 
     public static final PropertyDescriptor MY_PROPERTY = new PropertyDescriptor
             .Builder().name("My Property")
@@ -85,10 +88,11 @@ public class MyProcessor extends AbstractProcessor {
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) throws ProcessException {
         FlowFile flowFile = session.get();
-        if ( flowFile == null ) {
+        if (flowFile == null) {
             return;
         }
-        // TODO implement
+        // [TODO] implement
+
 
         System.out.println("Received a flow file");
         session.transfer(flowFile, MY_RELATIONSHIP);
