@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<smooks-resource-list
+        xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+        xmlns:edi="http://www.milyn.org/xsd/smooks/edi-1.4.xsd">
+
+    <params>
+        <param name="stream.filter.type">SAX</param>
+    </params>
+</smooks-resource-list>
