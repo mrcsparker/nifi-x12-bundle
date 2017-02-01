@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 /**
  * EDI X12 file splitter
+ * [INFO] Ugly code alert.  Just getting it working right now.
  *
  * @author <a href="mailto:mrcsparker@gmail.com">mrcsparker@gmail.com</a>
  */
@@ -22,13 +23,14 @@ public class X12Splitter {
     private Character compositeElementSeparator;
 
     private final Reader inputReader;
-    private List<String> baseList = new ArrayList<>();
-    private List<String> ediList = new ArrayList<>();
+    private List<X12File> baseList = new ArrayList<>();
+    private X12File x12File = new X12File();
 
-    private String isaSegment;
-    private String gsSegment;
-    private String geSegment;
-    private String ieaSegment;
+    private List<String> isaSegments = new ArrayList<>();
+    private List<String> gsSegments = new ArrayList<>();
+    private List<List<String>> stSegments = new ArrayList<>();
+    private List<String> geSegments = new ArrayList<>();
+    private List<String> ieaSegments = new ArrayList<>();
 
     /**
      * @param inputStream Input Stream
@@ -37,7 +39,7 @@ public class X12Splitter {
         this.inputReader = new BufferedReader(new InputStreamReader(inputStream));
     }
 
-    public List<String> split() throws IOException {
+    public List<X12File> split() throws IOException {
 
         parseHeader();
 
@@ -45,61 +47,59 @@ public class X12Splitter {
         scanner.useDelimiter(Pattern.quote(getSegmentSeparator().toString()));
 
         while(scanner.hasNext()) {
-            String s = scanSegment(scanner.next());
-            if (!s.equals("")) {
-                ediList.add(s);
+            List<String> s = scanSegment(scanner.next());
+            if (s != null) {
+                stSegments.add(s);
             }
         }
-        if (ediList.size() > 0) {
-            Collections.reverse(ediList);
-            ediList.add(gsSegment);
-            ediList.add(isaSegment);
-            Collections.reverse(ediList);
-            ediList.add(geSegment);
-            ediList.add(ieaSegment);
-            baseList.add(ediList.stream().collect(Collectors.joining("~")));
+        if (stSegments.size() > 0) {
+            x12File.setIsaSegments(isaSegments);
+            x12File.setGsSegments(gsSegments);
+            x12File.setStSegments(stSegments);
+            x12File.setIeaSegments(ieaSegments);
+            x12File.setGeSegments(geSegments);
+            baseList.add(x12File);
         }
         return baseList;
     }
 
-    String scanSegment(String segment) {
+    List<String> scanSegment(String segment) {
 
         List<String> l = new ArrayList<>();
 
         Scanner scanner = new Scanner(segment);
         scanner.useDelimiter(Pattern.quote(getElementSeparator().toString()));
         while (scanner.hasNext()) {
-            l.add(scanner.next().trim());
+            l.add(scanElement(scanner.next().trim()));
         }
 
         switch (l.get(0)) {
             case "ST":
-                if (ediList.size() > 0) {
-                    Collections.reverse(ediList);
-                    ediList.add(gsSegment);
-                    ediList.add(isaSegment);
-                    Collections.reverse(ediList);
-                    ediList.add(geSegment);
-                    ediList.add(ieaSegment);
-                    baseList.add(ediList.stream().collect(Collectors.joining("~")));
-                    ediList = new ArrayList<>();
+                if (stSegments.size() > 0) {
+                    x12File.setIsaSegments(isaSegments);
+                    x12File.setGsSegments(gsSegments);
+                    x12File.setStSegments(stSegments);
+                    x12File.setIeaSegments(ieaSegments);
+                    x12File.setGeSegments(geSegments);
+                    baseList.add(x12File);
+                    x12File = new X12File();
                 }
                 break;
             case "GS":
-                gsSegment = scanHeaderSegment(segment);
-                return "";
+                gsSegments = scanHeaderSegment(segment);
+                return null;
             case "GE":
-                geSegment = scanHeaderSegment(segment);
-                return "";
+                geSegments = scanHeaderSegment(segment);
+                return null;
             case "IEA":
-                ieaSegment = scanHeaderSegment(segment);
-                return "";
+                ieaSegments = scanHeaderSegment(segment);
+                return null;
         }
 
-        return l.stream().collect(Collectors.joining("*"));
+        return l;
     }
 
-    String scanHeaderSegment(String segment) {
+    List<String> scanHeaderSegment(String segment) {
         List<String> l = new ArrayList<>();
         Scanner scanner = new Scanner(segment);
         scanner.useDelimiter(Pattern.quote(getElementSeparator().toString()));
@@ -107,7 +107,7 @@ public class X12Splitter {
             String element = scanner.next().trim();
             l.add(scanElement(element));
         }
-        return l.stream().collect(Collectors.joining("*"));
+        return l;
     }
 
     String scanElement(String element) {
@@ -132,7 +132,7 @@ public class X12Splitter {
         elementSeparator = buf[ELEMENT_POSITION];
         compositeElementSeparator = buf[COMPOSITE_ELEMENT_POSITION];
 
-        isaSegment = scanHeaderSegment(testIsaSegment(buf));
+        isaSegments = scanHeaderSegment(testIsaSegment(buf));
 
     }
 
@@ -149,14 +149,18 @@ public class X12Splitter {
     }
 
     private String testIsaSegment(char[] buf) throws IOException {
+        List<String> l = new ArrayList<>();
+
         Scanner scanner = new Scanner(new String(buf));
         scanner.useDelimiter(Pattern.quote(getElementSeparator().toString()));
-        String result = scanner.next();
-        scanner.close();
-        if (!result.equals("ISA")) {
-            throw new IOException("Not valid file format. Got " + result + " instead of ISA. " + getElementSeparator().toString());
+        while (scanner.hasNext()) {
+            l.add(scanner.next().trim());
         }
-        return new String(buf);
+        scanner.close();
+        if (!l.get(0).equals("ISA")) {
+            throw new IOException("Not valid file format. Got " + l.get(0) + " instead of ISA. " + getElementSeparator().toString());
+        }
+        return l.stream().collect(Collectors.joining(getElementSeparator().toString()));
     }
 
 }

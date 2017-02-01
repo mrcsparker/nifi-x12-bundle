@@ -17,7 +17,7 @@ public class X12SplitterTest {
         InputStream inputStream = new FileInputStream(file);
 
         X12Splitter x12Splitter = new X12Splitter(inputStream);
-        List<String> edi = x12Splitter.split();
+        List<X12File> edi = x12Splitter.split();
 
         inputStream.close();
 
@@ -31,7 +31,7 @@ public class X12SplitterTest {
         InputStream inputStream = new FileInputStream(file);
 
         X12Splitter x12Splitter = new X12Splitter(inputStream);
-        List<String> edi = x12Splitter.split();
+        List<X12File> edi = x12Splitter.split();
         edi.forEach((e) -> System.out.println(e));
 
         inputStream.close();
