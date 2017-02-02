@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<medi:edimap xmlns:medi="http://www.milyn.org/schema/edi-message-mapping-1.6.xsd">
+    <medi:description name="Material Release for Manufacturing" version="1.0"/>
+    <medi:delimiters segment="~" field="*" component=":" sub-component=""/>
+    <medi:segments xmltag="edi" name="PO830" ignoreUnmappedSegments="true">
+        <medi:segmentGroup xmltag="transaction" minOccurs="1" maxOccurs="-1">
+            <medi:segment segcode="ST\*(830).*" xmltag="transaction-set-header" name="ST" description="To indicate the start of a transaction set and assign a control number" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="transaction-set-identifier-code" name="E143" required="true" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="transaction-set-control-number" name="E329" required="true" minLength="4" maxLength="9" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="BFR\*(00|04|05)\*.*\*.*\*(DL)\*(A).*" xmltag="beginning-segment-for-planning-schedule" name="BFR" description="To indicate the beginning of a planning schedule transaction set; whether a ship or delivery based forecast; and related forecast envelope dates" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="transaction-set-purpose-code" name="E353" required="true" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="NA-bfr02" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                <medi:field xmltag="release-number" name="E328" required="true" minLength="1" maxLength="30" dataType="String"/>
+                <medi:field xmltag="schedule-type-qualifier" name="E675" required="true" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="schedule-quantity-qualifier" name="E676" required="true" minLength="1" maxLength="1" dataType="String"/>
+                <medi:field xmltag="date-horizon-start" name="E373" required="true" minLength="6" maxLength="6" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="date-horizon-end" name="E373" required="true" minLength="6" maxLength="6" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="date-release-generation" name="E373" required="true" minLength="6" maxLength="6" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="NA-bfr09" name="E324" required="false" minLength="1" maxLength="22" dataType="String"/>
+                <medi:field xmltag="contract-number-nissan-facility-id" name="E367" required="false" minLength="1" maxLength="30" dataType="String"/>
+            </medi:segment>
+            <medi:segmentGroup xmltag="n1-loop1" minOccurs="0" maxOccurs="-1">
+                <medi:segment segcode="N1\*(SU).*" xmltag="name-supplier-code" name="N1" description="To identify a party by type of organization, name, and code" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-n102" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="identification-code-supplier-code-assigned-by-nissan" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                </medi:segment>
+            </medi:segmentGroup>
+            <medi:segmentGroup xmltag="n1-loop2" minOccurs="0" maxOccurs="-1">
+                <medi:segment segcode="N1\*(MI).*" xmltag="name-nissan-analyst" name="N1" description="To identify a party by type of organization, name, and code" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="identification-code-qualifier" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="NA-n103" name="E66" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="NA-n104" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="PER\*(OD).*" xmltag="administrative-communications-contact-nissan-release-sr-analyst" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="3">
+                    <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="name-per02" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-per05" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-per06" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-per07" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-per08" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-per09" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                </medi:segment>
+            </medi:segmentGroup>
+            <medi:segmentGroup xmltag="lin" minOccurs="1" maxOccurs="-1">
+                <medi:segment segcode="LIN\*.*\*(BP).*" xmltag="item-identification" name="LIN" description="To specify basic item identification data" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="NA-lin01" name="E350" required="false" minLength="1" maxLength="20" dataType="String"/>
+                    <medi:field xmltag="product-service-id-qualifier-lin02" name="E235" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="product-service-id-part-number-assigned-by-nissan" name="E234" required="true" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="product-service-id-qualifier-lin04" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="product-service-id-purchase-order-number-assigned-by-nissan" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin06" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin07" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin08" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin09" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin10" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin11" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin12" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin13" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin14" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin15" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin16" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin17" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin18" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin19" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin20" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin21" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin22" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin23" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin24" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin25" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin26" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin27" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin28" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin29" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                    <medi:field xmltag="NA-lin30" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-lin31" name="E234" required="false" minLength="1" maxLength="40" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="UNT\*(EA).*" xmltag="unit-of-measure" name="UNT" description="To ...." truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="unit-or-basis-for-measurement-code" name="E355" required="true" minLength="2" maxLength="2" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="J2X\*.*" xmltag="item-description" name="J2X" description="To ..." truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="NA-j2x01-item-desc-qualifier" name="E349" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    <medi:field xmltag="item-description-type" name="E349" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    <medi:field xmltag="lading-liability-code-nissans-part-description" name="E372" required="true" minLength="1" maxLength="25" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="PER\*(EX).*" xmltag="administrative-communications-contact-nissan-parts-order-analyst" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="name-per02" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-per05" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-per06" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-per07" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-per08" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-per09" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                </medi:segment>
+                <medi:segmentGroup xmltag="n1" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="N1\*(ST).*" xmltag="name-dock-location" name="N1" description="To identify a party by type of organization, name, and code" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-name-dock-location" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="NA-n103" name="E66" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-n104" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="sdp" minOccurs="1" maxOccurs="-1">
+                    <medi:segment segcode="SDP\*(B|Y)\*(F|Y).*" xmltag="ship-delivery-pattern" name="SDP" description="To identify specific ship/delivery requirements" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                        <medi:field xmltag="ship-delivery-or-calendar-pattern-code" name="E678" required="true" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="ship-delivery-or-calendar-pattern-code" name="E679" required="true" minLength="1" maxLength="1" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="FST\*.*\*(C|Z|D)\*(D|F).*" xmltag="forecast-schedule" name="FST" description="To specify the forecasted dates and quantities" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="104">
+                        <medi:field xmltag="quantity" name="E380" required="true" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="forecast-qualifier" name="E680" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="forecast-timing-qualifier" name="E681" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="date-fst04" name="E373" required="true" minLength="6" maxLength="6" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                        <medi:field xmltag="date-fst05" name="E373" required="false" minLength="6" maxLength="6" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                        <medi:field xmltag="date-time-qualifier" name="E374" required="false" minLength="3" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="time-fst07" name="E337" required="false" minLength="4" maxLength="4" dataType="String"/>
+                        <medi:field xmltag="reference-number-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="reference-number-ran" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+            </medi:segmentGroup>
+            <medi:segment segcode="CTT\*.*" xmltag="transaction-totals" name="CTT" description="To transmit a hash total for a specific element in the transaction set" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="number-of-line-items" name="E354" required="true" minLength="1" maxLength="6" dataType="Integer"/>
+                <medi:field xmltag="NA-ctt02" name="E347" required="false" minLength="1" maxLength="10" dataType="String"/>
+                <medi:field xmltag="NA-ctt03" name="E81" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                <medi:field xmltag="NA-ctt04" name="E355" required="false" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="NA-ctt05" name="E183" required="false" minLength="1" maxLength="8" dataType="Float"/>
+                <medi:field xmltag="NA-ctt06" name="E355" required="false" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="NA-ctt07" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="SE\*.*" xmltag="transaction-set-trailer" name="SE" description="To indicate the end of the transaction set and provide the count of the transmitted segments (including the beginning (ST) and ending (SE) segments)" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="number-of-included-segments" name="E96" required="true" minLength="1" maxLength="10" dataType="Integer"/>
+                <medi:field xmltag="transaction-set-control-number" name="E329" required="true" minLength="4" maxLength="9" dataType="String"/>
+            </medi:segment>
+        </medi:segmentGroup>
+    </medi:segments>
+</medi:edimap>

@@ -39,7 +39,6 @@ public class X12SplitterTest {
         edi.forEach(System.out::println);
 
         inputStream.close();
-        
 
         assertTrue(edi.size() == 2);
         assertTrue(edi.get(0).toString().substring(0, 3).equals("ISA"));

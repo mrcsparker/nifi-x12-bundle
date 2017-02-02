@@ -92,24 +92,16 @@ public class X12Processor extends AbstractProcessor {
         }
 
 
-        InputStream input = session.read(flowFile);
+        InputStream inputStream = session.read(flowFile);
 
-        X12Parser x12Parser = new X12Parser();
+
+        X12Splitter x12Splitter = new X12Splitter(inputStream);
         try {
-            x12Parser.parse(input);
+            List<X12File> x12Files = x12Splitter.split();
         } catch (IOException e) {
-            getLogger().error("SAXException: " + e.getMessage());
+            e.printStackTrace();
             session.transfer(flowFile, REL_FAILURE);
         }
-
-        Delimiters delimiters = new Delimiters();
-        delimiters.setSegment(x12Parser.getSegmentSeparator().toString());
-        delimiters.setField(x12Parser.getElementSeparator().toString());
-        delimiters.setComponent(x12Parser.getCompositeElementSeparator().toString());
-
-        Edimap edimap = new Edimap();
-        edimap.setDelimiters(delimiters);
-
 
         Smooks smooks = new Smooks();
         EDIReaderConfigurator ediReaderConfigurator = new EDIReaderConfigurator("smooks-config.xml");

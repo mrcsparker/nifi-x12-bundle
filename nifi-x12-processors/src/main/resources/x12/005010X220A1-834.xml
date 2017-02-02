@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<medi:edimap xmlns:medi="http://www.milyn.org/schema/edi-message-mapping-1.6.xsd">
+    <medi:description name="Benefit Enrollment and Maintenance" version="1.0"/>
+    <medi:delimiters segment="~" field="*" component=":" sub-component=""/>
+    <medi:segments xmltag="edi" name="BE834" ignoreUnmappedSegments="true">
+        <medi:segmentGroup xmltag="transaction" minOccurs="1" maxOccurs="-1">
+            <medi:segment segcode="ST\*(834)\*.*\*(005010X220A1).*" xmltag="transaction-set-header" name="ST" description="To indicate the start of a transaction set and assign a control number" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="transaction-set-identifier-code" name="E143" required="true" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="transaction-set-control-number" name="E329" required="true" minLength="4" maxLength="9" dataType="String"/>
+                <medi:field xmltag="implementation-convention-reference" name="E1705" required="true" minLength="1" maxLength="35" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="BGN\*(00|15|22)\*.*\*.*\*.*\*.*\*.*\*.*\*(2|4|RX).*" xmltag="beginning-segment" name="BGN" description="To indicate the beginning of a transaction set" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="transaction-set-purpose-code" name="E353" required="true" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                <medi:field xmltag="transaction-set-creation-date" name="E373" required="true" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="transaction-set-creation-time" name="E337" required="true" minLength="4" maxLength="8" dataType="String"/>
+                <medi:field xmltag="NA-time-zone-code" name="E623" required="false" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="original-transaction-set-reference-number" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                <medi:field xmltag="NA-transaction-type-code" name="E640" required="false" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="action-code" name="E306" required="true" minLength="1" maxLength="2" dataType="String"/>
+                <medi:field xmltag="NA-security-level-code" name="E786" required="false" minLength="2" maxLength="2" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="REF\*(38).*" xmltag="transaction-set-policy-number" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                <medi:field xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                </medi:field>
+            </medi:segment>
+            <medi:segment segcode="DTP\*(007|090|091|303|382|388)\*(D8).*" xmltag="file-effective-date" name="DTP" description="To specify any or all of a date, or a time period" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="2">
+                <medi:field xmltag="date-time-qualifier" name="E374" required="true" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="date-time-period-format-qualifier" name="E1250" required="true" minLength="2" maxLength="3" dataType="String"/>
+                <medi:field xmltag="date-time-period" name="E1251" required="true" minLength="1" maxLength="8" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="QTY\*(DT|ET|TO).*" xmltag="transaction-set-control-totals" name="QTY" description="To specify quantity information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="3">
+                <medi:field xmltag="quantity-qualifier" name="E673" required="true" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="quantity" name="E380" required="true" minLength="1" maxLength="15" dataType="Float"/>
+                <medi:field xmltag="composite-unit-of-measure" name="C001" required="false" truncatable="true">
+                    <medi:component xmltag="unit-or-basis-for-measurement-code" name="E355" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="exponent" name="E1018" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:component xmltag="multiplier" name="E649" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                    <medi:component xmltag="unit-or-basis-for-measurement-code" name="E355" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="exponent" name="E1018" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:component xmltag="multiplier" name="E649" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                    <medi:component xmltag="unit-or-basis-for-measurement-code" name="E355" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="exponent" name="E1018" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:component xmltag="multiplier" name="E649" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                    <medi:component xmltag="unit-or-basis-for-measurement-code" name="E355" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="exponent" name="E1018" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:component xmltag="multiplier" name="E649" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                    <medi:component xmltag="unit-or-basis-for-measurement-code" name="E355" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="exponent" name="E1018" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:component xmltag="multiplier" name="E649" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                </medi:field>
+                <medi:field xmltag="NA-free-form-information" name="E61" required="false" minLength="1" maxLength="30" dataType="String"/>
+            </medi:segment>
+            <medi:segmentGroup xmltag="1000a-sponsor-name" minOccurs="1" maxOccurs="-1">
+                <medi:segment segcode="N1\*(P5)\*.*\*(24|94|FI).*" xmltag="sponsor-name" name="N1" description="To identify a party by type of organization, name, and code" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="identification-code-qualifier" name="E66" required="true" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="identification-code" name="E67" required="true" minLength="2" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                </medi:segment>
+            </medi:segmentGroup>
+            <medi:segmentGroup xmltag="1000b-payer" minOccurs="1" maxOccurs="-1">
+                <medi:segment segcode="N1\*(IN)\*.*\*(94|FI|XV).*" xmltag="payer" name="N1" description="To identify a party by type of organization, name, and code" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="identification-code-qualifier" name="E66" required="true" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="identification-code" name="E67" required="true" minLength="2" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                </medi:segment>
+            </medi:segmentGroup>
+            <medi:segmentGroup xmltag="1000c-tpa-broker-name" minOccurs="0" maxOccurs="-1">
+                <medi:segment segcode="N1\*(BO|TV)\*.*\*(94|FI|XV).*" xmltag="tpa-broker-name" name="N1" description="To identify a party by type of organization, name, and code" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="identification-code-qualifier" name="E66" required="true" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="identification-code" name="E67" required="true" minLength="2" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                </medi:segment>
+            </medi:segmentGroup>
+            <medi:segmentGroup xmltag="1100c-tpa-broker-account-information" minOccurs="0" maxOccurs="-1">
+                <medi:segment segcode="ACT\*.*" xmltag="tpa-broker-account-information" name="ACT" description="To specify account information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="account-number" name="E508" required="true" minLength="1" maxLength="35" dataType="String"/>
+                    <medi:field xmltag="NA-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="NA-identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-identification-code" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-account-number-qualifier" name="E569" required="false" minLength="1" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="account-number" name="E508" required="false" minLength="1" maxLength="35" dataType="String"/>
+                    <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-payment-method-type-code" name="E107" required="false" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-benefit-status-code" name="E1216" required="false" minLength="1" maxLength="1" dataType="String"/>
+                </medi:segment>
+            </medi:segmentGroup>
+            <medi:segmentGroup xmltag="2000-member-level-detail" minOccurs="1" maxOccurs="-1">
+                <medi:segment segcode="INS\*(N|Y)\*(01|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|23|24|25|26|31|38|53|60|D2|G8|G9)\*(001|021|024|025|030)\*.*\*(A|C|S|T).*" xmltag="member-level-detail" name="INS" description="To provide benefit information on insured entities" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="member-indicator" name="E1073" required="true" minLength="1" maxLength="1" dataType="String"/>
+                    <medi:field xmltag="individual-relationship-code" name="E1069" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="maintenance-type-code" name="E875" required="true" minLength="3" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="maintenance-reason-code" name="E1203" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="benefit-status-code" name="E1216" required="true" minLength="1" maxLength="1" dataType="String"/>
+                    <medi:field xmltag="medicare-status-code" name="C052" required="false" truncatable="true">
+                        <medi:component xmltag="medicare-plan-code" name="E1218" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:component xmltag="medicare-eligibility-reason-code" name="E1701" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:component xmltag="eligibility-reason-code" name="E1701" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:component xmltag="eligibility-reason-code" name="E1701" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    </medi:field>
+                    <medi:field xmltag="consolidated-omnibus-budget-reconciliation-act-cobra-qualifying-event-code" name="E1219" required="false" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="employment-status-code" name="E584" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="student-status-code" name="E1220" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    <medi:field xmltag="handicap-indicator" name="E1073" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    <medi:field xmltag="date-time-period-format-qualifier" name="E1250" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="member-individual-death-date" name="E1251" required="false" minLength="1" maxLength="35" dataType="String"/>
+                    <medi:field xmltag="confidentiality-code" name="E1165" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    <medi:field xmltag="NA-city-name" name="E19" required="false" minLength="2" maxLength="30" dataType="String"/>
+                    <medi:field xmltag="NA-state-or-province-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="birth-sequence-number" name="E1470" required="false" minLength="1" maxLength="9" dataType="Integer"/>
+                </medi:segment>
+                <medi:segment segcode="REF\*(0F).*" xmltag="subscriber-identifier" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                    <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                    </medi:field>
+                </medi:segment>
+                <medi:segment segcode="REF\*(1L).*" xmltag="member-policy-number" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                    <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                    </medi:field>
+                </medi:segment>
+                <medi:segment segcode="REF\*(17|23|3H|4A|6O|ABB|D3|DX|F6|P5|Q4|QQ|ZZ).*" xmltag="member-supplemental-identifier" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="13">
+                    <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                    <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                    </medi:field>
+                </medi:segment>
+                <medi:segment segcode="DTP\*(050|286|296|297|300|301|303|336|337|338|339|340|341|350|351|356|357|383|385|386|393|394|473|474)\*(D8).*" xmltag="member-level-dates" name="DTP" description="To specify any or all of a date, or a time period" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="24">
+                    <medi:field xmltag="date-time-qualifier" name="E374" required="true" minLength="3" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="date-time-period-format-qualifier" name="E1250" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="status-information-effective-date" name="E1251" required="true" minLength="1" maxLength="35" dataType="String"/>
+                </medi:segment>
+                <medi:segmentGroup xmltag="2100a-member" minOccurs="1" maxOccurs="-1">
+                    <medi:segment segcode="NM1\*(74|IL)\*(1).*" xmltag="member-name" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="name-last-or-organization-name" name="E1035" required="true" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="name-first" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="name-middle" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="identification-code" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="PER\*(IP)\*.*\*(AP|BN|CP|EM|EX|FX|HP|TE|WP).*" xmltag="member-communications-numbers" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="true" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="NA-contact-inquiry-reference" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N3\*.*" xmltag="member-residence-street-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="address-information" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                        <medi:field xmltag="address-information" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N4\*.*" xmltag="member-city-state-zip-code" name="N4" description="To specify the geographic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="member-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="member-state-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="member-postal-zone-or-zip-code" name="E116" required="false" minLength="3" maxLength="15" dataType="String"/>
+                        <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="country-subdivision-code" name="E1715" required="false" minLength="1" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="DMG\*(D8)\*.*\*(F|M|U).*" xmltag="member-demographics" name="DMG" description="To supply demographic information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="date-time-period-format-qualifier" name="E1250" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="member-birth-date" name="E1251" required="true" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="gender-code" name="E1068" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="marital-status-code" name="E1067" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="composite-race-or-ethnicity-information" name="C056" required="false" truncatable="true">
+                            <medi:component xmltag="race-or-ethnicity-code" name="E1109" required="false" minLength="1" maxLength="1" dataType="String"/>
+                            <medi:component xmltag="code-list-qualifier-code" name="E1270" required="false" minLength="1" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="race-or-ethnicity-code" name="E1271" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        </medi:field>
+                        <medi:field xmltag="citizenship-status-code" name="E1066" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-basis-of-verification-code" name="E659" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="code-list-qualifier-code" name="E1270" required="false" minLength="1" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="race-or-ethnicity-collection-code" name="E1271" required="false" minLength="1" maxLength="30" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="EC\*(01|02|03|04|05|06|07|08|09|10|11|12|17|18|19|20|21|22|23).*" xmltag="employment-class" name="EC" description="To provide information on health coverage" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="-1">
+                        <medi:field xmltag="employment-class-code" name="E1176" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="employment-class-code" name="E1176" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="employment-class-code" name="E1176" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-percentage-as-decimal" name="E954" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                        <medi:field xmltag="NA-information-status-code" name="E1201" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="NA-occupation-code" name="E1149" required="false" minLength="4" maxLength="6" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="ICM\*(1|2|3|4|6|7|8|9|B|C|H|Q|S|U).*" xmltag="member-income" name="ICM" description="To supply information to determine benefit eligibility, deductibles, and retirement and investment contributions" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="frequency-code" name="E594" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="wage-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="work-hours-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="location-identification-code" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="salary-grade-code" name="E1214" required="false" minLength="1" maxLength="5" dataType="String"/>
+                        <medi:field xmltag="NA-currency-code" name="E100" required="false" minLength="3" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="AMT\*(B9|C1|D2|EBA|FK|P3|R).*" xmltag="member-policy-amounts" name="AMT" description="To indicate the total monetary amount" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="7">
+                        <medi:field xmltag="amount-qualifier-code" name="E522" required="true" minLength="1" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="contract-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="NA-credit-debit-flag-code" name="E478" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="HLH\*(N|S|T|U|X).*" xmltag="member-health-information" name="HLH" description="To provide health information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="health-related-code" name="E1212" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="member-height" name="E65" required="false" minLength="1" maxLength="8" dataType="Float"/>
+                        <medi:field xmltag="member-weight" name="E81" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                        <medi:field xmltag="NA-weight" name="E81" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                        <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-current-health-condition-code" name="E1213" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="LUI\*.*" xmltag="member-language" name="LUI" description="To specify language, type of usage, and proficiency or fluency" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="-1">
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="language-code" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="language-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="language-use-indicator" name="E1303" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-language-proficiency-indicator" name="E1476" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2100b-incorrect-member-name" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="NM1\*(70)\*(1).*" xmltag="incorrect-member-name" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="prior-incorrect-member-last-name" name="E1035" required="true" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="prior-incorrect-member-first-name" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="prior-incorrect-member-middle-name" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="prior-incorrect-member-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="prior-incorrect-member-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="prior-incorrect-insured-identifier" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="DMG\*.*" xmltag="incorrect-member-demographics" name="DMG" description="To supply demographic information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="date-time-period-format-qualifier" name="E1250" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="prior-incorrect-insured-birth-date" name="E1251" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="prior-incorrect-insured-gender-code" name="E1068" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="marital-status-code" name="E1067" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="composite-race-or-ethnicity-information" name="C056" required="false" truncatable="true">
+                            <medi:component xmltag="race-or-ethnicity-code" name="E1109" required="false" minLength="1" maxLength="1" dataType="String"/>
+                            <medi:component xmltag="code-list-qualifier-code" name="E1270" required="false" minLength="1" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="race-or-ethnicity-code" name="E1271" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        </medi:field>
+                        <medi:field xmltag="citizenship-status-code" name="E1066" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-basis-of-verification-code" name="E659" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="code-list-qualifier-code" name="E1270" required="false" minLength="1" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="race-or-ethnicity-collection-code" name="E1271" required="false" minLength="1" maxLength="30" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2100c-member-mailing-address" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="NM1\*(31)\*(1).*" xmltag="member-mailing-address" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="NA-name-first" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="NA-name-middle" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="NA-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="NA-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="NA-identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-identification-code" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N3\*.*" xmltag="member-mail-street-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                        <medi:field xmltag="address-information" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                        <medi:field xmltag="address-information" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N4\*.*" xmltag="member-mail-city-state-zip-code" name="N4" description="To specify the geographic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="member-mail-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="member-mail-state-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="member-mail-postal-zone-or-zip-code" name="E116" required="false" minLength="3" maxLength="15" dataType="String"/>
+                        <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="country-subdivision-code" name="E1715" required="false" minLength="1" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2100d-member-employer" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="NM1\*(36)\*(1|2).*" xmltag="member-employer" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="member-employer-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="member-employer-first-name" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="member-employer-middle-name" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="member-employer-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="member-employer-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="member-employer-identifier" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="PER\*(EP)\*.*\*(AP|BN|CP|EM|EX|FX|TE).*" xmltag="member-employer-communications-numbers" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="member-employer-communications-contact-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="true" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="NA-contact-inquiry-reference" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N3\*.*" xmltag="member-employer-street-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="address-information" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                        <medi:field xmltag="address-information" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N4\*.*" xmltag="member-employer-city-state-zip-code" name="N4" description="To specify the geographic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="member-employer-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="member-employer-state-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="member-employer-postal-zone-or-zip-code" name="E116" required="false" minLength="3" maxLength="15" dataType="String"/>
+                        <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="country-subdivision-code" name="E1715" required="false" minLength="1" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2100e-member-school" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="NM1\*(M8)\*(2).*" xmltag="member-school" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="school-name" name="E1035" required="true" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="NA-name-first" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="NA-name-middle" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="NA-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="NA-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="NA-identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-identification-code" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="PER\*(SK)\*.*\*(EM|EX|FX|TE).*" xmltag="member-school-communications-numbers" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="member-school-communications-contact-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="true" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="NA-contact-inquiry-reference" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N3\*.*" xmltag="member-school-street-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="address-information" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                        <medi:field xmltag="address-information" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N4\*.*" xmltag="member-school-city-state-zip-code" name="N4" description="To specify the geographic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="member-school-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="member-school-state-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="member-school-postal-zone-or-zip-code" name="E116" required="false" minLength="3" maxLength="15" dataType="String"/>
+                        <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="country-subdivision-code" name="E1715" required="false" minLength="1" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2100f-custodial-parent" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="NM1\*(S3)\*(1).*" xmltag="custodial-parent" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="custodial-parent-last-name" name="E1035" required="true" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="custodial-parent-first-name" name="E1036" required="true" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="custodial-parent-middle-name" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="custodial-parent-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="custodial-parent-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="custodial-parent-identifier" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="PER\*(PQ)\*.*\*(AP|BN|CP|EM|EX|FX|HP|TE|WP).*" xmltag="custodial-parent-communications-numbers" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="true" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="NA-contact-inquiry-reference" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N3\*.*" xmltag="custodial-parent-street-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="address-information" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                        <medi:field xmltag="address-information" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N4\*.*" xmltag="custodial-parent-city-state-zip-code" name="N4" description="To specify the geographic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="custodial-parent-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="custodial-parent-state-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="custodial-parent-postal-zone-or-zip-code" name="E116" required="false" minLength="3" maxLength="15" dataType="String"/>
+                        <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="country-subdivision-code" name="E1715" required="false" minLength="1" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2100g-responsible-person" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="NM1\*(6Y|9K|E1|EI|EXS|GB|GD|J6|LR|QD|S1|TZ|X4)\*(1).*" xmltag="responsible-person" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="responsible-party-last-or-organization-name" name="E1035" required="true" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="responsible-party-first-name" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="responsible-party-middle-name" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="responsible-party-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="responsible-party-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="responsible-party-identifier" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="PER\*(RP)\*.*\*(AP|BN|CP|EM|EX|FX|HP|TE|WP).*" xmltag="responsible-person-communications-numbers" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="true" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                        <medi:field xmltag="NA-contact-inquiry-reference" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N3\*.*" xmltag="responsible-person-street-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="address-information" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                        <medi:field xmltag="address-information" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N4\*.*" xmltag="responsible-person-city-state-zip-code" name="N4" description="To specify the geographic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="responsible-person-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="responsible-person-state-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="responsible-person-postal-zone-or-zip-code" name="E116" required="false" minLength="3" maxLength="15" dataType="String"/>
+                        <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="country-subdivision-code" name="E1715" required="false" minLength="1" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2100h-drop-off-location" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="NM1\*(45)\*(1).*" xmltag="drop-off-location" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="name-first" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="name-middle" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="NA-identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-identification-code" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N3\*.*" xmltag="drop-off-location-street-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="address-information" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                        <medi:field xmltag="address-information" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="N4\*.*" xmltag="drop-off-location-city-state-zip-code" name="N4" description="To specify the geographic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="drop-off-location-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="drop-off-location-state-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="drop-off-location-postal-zone-or-zip-code" name="E116" required="false" minLength="3" maxLength="15" dataType="String"/>
+                        <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="country-subdivision-code" name="E1715" required="false" minLength="1" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2200-disability-information" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="DSB\*(1|2|3|4).*" xmltag="disability-information" name="DSB" description="To provide disability information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="disability-type-code" name="E1146" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="NA-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="NA-occupation-code" name="E1149" required="false" minLength="4" maxLength="6" dataType="String"/>
+                        <medi:field xmltag="NA-work-intensity-code" name="E1154" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="NA-product-option-code" name="E1161" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-monetary-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="product-or-service-id-qualifier" name="E235" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="diagnosis-code" name="E1137" required="false" minLength="1" maxLength="15" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="DTP\*(360|361)\*(D8).*" xmltag="disability-eligibility-dates" name="DTP" description="To specify any or all of a date, or a time period" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="2">
+                        <medi:field xmltag="date-time-qualifier" name="E374" required="true" minLength="3" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="date-time-period-format-qualifier" name="E1250" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="disability-eligibility-date" name="E1251" required="true" minLength="1" maxLength="35" dataType="String"/>
+                    </medi:segment>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2300-health-coverage" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="HD\*(001|002|021|024|025|026|030|032)\*.*\*(AG|AH|AJ|AK|DCP|DEN|EPO|FAC|HE|HLT|HMO|LTC|LTD|MM|MOD|PDG|POS|PPO|PRA|STD|UR|VIS).*" xmltag="health-coverage" name="HD" description="To provide information on health coverage" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="maintenance-type-code" name="E875" required="true" minLength="3" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-maintenance-reason-code" name="E1203" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="insurance-line-code" name="E1205" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="plan-coverage-description" name="E1204" required="false" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:field xmltag="coverage-level-code" name="E1207" required="false" minLength="3" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-count" name="E609" required="false" minLength="1" maxLength="9" dataType="Integer"/>
+                        <medi:field xmltag="NA-count" name="E609" required="false" minLength="1" maxLength="9" dataType="Integer"/>
+                        <medi:field xmltag="NA-underwriting-decision-code" name="E1209" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="late-enrollment-indicator" name="E1073" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="NA-drug-house-code" name="E1211" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-yes-no-condition-or-response-code" name="E1073" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="DTP\*(300|303|343|348|349|543|695)\*(D8|RD8).*" xmltag="health-coverage-dates" name="DTP" description="To specify any or all of a date, or a time period" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="6">
+                        <medi:field xmltag="date-time-qualifier" name="E374" required="true" minLength="3" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="date-time-period-format-qualifier" name="E1250" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="coverage-period" name="E1251" required="true" minLength="1" maxLength="35" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="AMT\*(B9|C1|D2|EBA|FK|P3|R).*" xmltag="health-coverage-policy" name="AMT" description="To indicate the total monetary amount" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="9">
+                        <medi:field xmltag="amount-qualifier-code" name="E522" required="true" minLength="1" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="contract-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="NA-credit-debit-flag-code" name="E478" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="REF\*(17|1L|9V|CE|E8|M7|PID|RB|X9|XM|XX1|XX2|ZX|ZZ).*" xmltag="health-coverage-policy-number" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="14">
+                        <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                        </medi:field>
+                    </medi:segment>
+                    <medi:segment segcode="REF\*(QQ).*" xmltag="prior-coverage-months" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                        </medi:field>
+                    </medi:segment>
+                    <medi:segment segcode="IDC\*.*\*(D|H|P).*" xmltag="identification-card" name="IDC" description="To provide notification to produce replacement identification card(s)" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="3">
+                        <medi:field xmltag="plan-coverage-description" name="E1204" required="true" minLength="1" maxLength="50" dataType="String"/>
+                        <medi:field xmltag="identification-card-type-code" name="E1215" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="identification-card-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="action-code" name="E306" required="false" minLength="1" maxLength="2" dataType="String"/>
+                    </medi:segment>
+                    <medi:segmentGroup xmltag="2310-provider-information" minOccurs="0" maxOccurs="-1">
+                        <medi:segment segcode="LX\*.*" xmltag="provider-information" name="LX" description="To reference a line number in a transaction set" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                            <medi:field xmltag="assigned-number" name="E554" required="true" minLength="1" maxLength="6" dataType="Integer"/>
+                        </medi:segment>
+                        <medi:segment segcode="NM1\*(1X|3D|80|FA|OD|P3|QA|QN|Y2)\*(1|2)\*.*\*.*\*.*\*.*\*.*\*.*\*.*\*(25|26|72).*" xmltag="provider-name" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                            <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                            <medi:field xmltag="provider-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                            <medi:field xmltag="provider-first-name" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                            <medi:field xmltag="provider-middle-name" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                            <medi:field xmltag="provider-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                            <medi:field xmltag="provider-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                            <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="provider-identifier" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                            <medi:field xmltag="entity-relationship-code" name="E706" required="true" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        </medi:segment>
+                        <medi:segment segcode="N3\*.*" xmltag="provider-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="2">
+                            <medi:field xmltag="address-information" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                            <medi:field xmltag="address-information" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                        </medi:segment>
+                        <medi:segment segcode="N4\*.*" xmltag="provider-city-state-zip-code" name="N4" description="To specify the geographic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                            <medi:field xmltag="provider-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                            <medi:field xmltag="provider-state-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="provider-postal-zone-or-zip-code" name="E116" required="false" minLength="3" maxLength="15" dataType="String"/>
+                            <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                            <medi:field xmltag="country-subdivision-code" name="E1715" required="false" minLength="1" maxLength="3" dataType="String"/>
+                        </medi:segment>
+                        <medi:segment segcode="PER\*(IC)\*.*\*(AP|BN|CP|EM|EX|FX|HP|TE|WP).*" xmltag="provider-communications-numbers" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="2">
+                            <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="NA-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                            <medi:field xmltag="communication-number-qualifier" name="E365" required="true" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="communication-number" name="E364" required="true" minLength="1" maxLength="256" dataType="String"/>
+                            <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                            <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                            <medi:field xmltag="NA-contact-inquiry-reference" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                        </medi:segment>
+                        <medi:segment segcode="PLA\*(2)\*(1P)\*.*\*.*\*(14|22|46|AA|AB|AC|AD|AE|AF|AG|AH|AI|AJ).*" xmltag="provider-change-reason" name="PLA" description="To indicate action to be taken for the location specified and to qualify the location specified" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                            <medi:field xmltag="action-code" name="E306" required="true" minLength="1" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="provider-effective-date" name="E373" required="true" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                            <medi:field xmltag="NA-time" name="E337" required="false" minLength="4" maxLength="8" dataType="String"/>
+                            <medi:field xmltag="maintenance-reason-code" name="E1203" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        </medi:segment>
+                    </medi:segmentGroup>
+                    <medi:segmentGroup xmltag="2320-coordination-of-benefits" minOccurs="0" maxOccurs="-1">
+                        <medi:segment segcode="COB\*(P|S|T|U)\*.*\*(1|5|6).*" xmltag="coordination-of-benefits" name="COB" description="To supply information on coordination of benefits" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                            <medi:field xmltag="payer-responsibility-sequence-number-code" name="E1138" required="true" minLength="1" maxLength="1" dataType="String"/>
+                            <medi:field xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                            <medi:field xmltag="coordination-of-benefits-code" name="E1143" required="true" minLength="1" maxLength="1" dataType="String"/>
+                            <medi:field xmltag="service-code" name="E1365" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        </medi:segment>
+                        <medi:segment segcode="REF\*(60|6P|SY|ZZ).*" xmltag="additional-coordination-of-benefits-identifiers" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="4">
+                            <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                            <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                            <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                                <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                                <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                                <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                            </medi:field>
+                        </medi:segment>
+                        <medi:segment segcode="DTP\*(344|345)\*(D8).*" xmltag="coordination-of-benefits-eligibility-dates" name="DTP" description="To specify any or all of a date, or a time period" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="2">
+                            <medi:field xmltag="date-time-qualifier" name="E374" required="true" minLength="3" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="date-time-period-format-qualifier" name="E1250" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="coordination-of-benefits-date" name="E1251" required="true" minLength="1" maxLength="35" dataType="String"/>
+                        </medi:segment>
+                        <medi:segmentGroup xmltag="2330-coordination-of-benefits-related-entity" minOccurs="0" maxOccurs="-1">
+                            <medi:segment segcode="NM1\*(36|GW|IN)\*(2).*" xmltag="coordination-of-benefits-related-entity" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                                <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                                <medi:field xmltag="coordination-of-benefits-insurer-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                                <medi:field xmltag="NA-name-first" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                                <medi:field xmltag="NA-name-middle" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                                <medi:field xmltag="NA-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                                <medi:field xmltag="NA-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                                <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="coordination-of-benefits-insurer-identification-code" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                                <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:field xmltag="NA-name-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                            </medi:segment>
+                            <medi:segment segcode="N3\*.*" xmltag="coordination-of-benefits-related-entity-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                                <medi:field xmltag="address-information" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                                <medi:field xmltag="address-information" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                            </medi:segment>
+                            <medi:segment segcode="N4\*.*" xmltag="coordination-of-benefits-other-insurance-company-city-state-zip-code" name="N4" description="To specify the geographic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                                <medi:field xmltag="coordination-of-benefits-other-insurance-company-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                                <medi:field xmltag="coordination-of-benefits-other-insurance-company-state-code" name="E156" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="coordination-of-benefits-other-insurance-company-postal-zone-or-zip-code" name="E116" required="false" minLength="3" maxLength="15" dataType="String"/>
+                                <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                                <medi:field xmltag="country-subdivision-code" name="E1715" required="false" minLength="1" maxLength="3" dataType="String"/>
+                            </medi:segment>
+                            <medi:segment segcode="PER\*(CN)\*.*\*(TE).*" xmltag="administrative-communications-contact" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                                <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="NA-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                                <medi:field xmltag="communication-number-qualifier" name="E365" required="true" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="communication-number" name="E364" required="true" minLength="1" maxLength="256" dataType="String"/>
+                                <medi:field xmltag="NA-communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="NA-communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                                <medi:field xmltag="NA-communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="NA-communication-number" name="E364" required="false" minLength="1" maxLength="256" dataType="String"/>
+                                <medi:field xmltag="NA-contact-inquiry-reference" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                            </medi:segment>
+                        </medi:segmentGroup>
+                    </medi:segmentGroup>
+                </medi:segmentGroup>
+                <medi:segmentGroup xmltag="2700-additional-reporting-categories" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="LS\*(2700).*" xmltag="additional-reporting-categories" name="LS" description="To indicate that the next segment begins a loop" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="loop-identifier-code" name="E447" required="true" minLength="1" maxLength="4" dataType="String"/>
+                    </medi:segment>
+                    <medi:segmentGroup xmltag="2710-member-reporting-categories" minOccurs="0" maxOccurs="-1">
+                        <medi:segment segcode="LX\*.*" xmltag="member-reporting-categories" name="LX" description="To reference a line number in a transaction set" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                            <medi:field xmltag="assigned-number" name="E554" required="true" minLength="1" maxLength="6" dataType="Integer"/>
+                        </medi:segment>
+                        <medi:segmentGroup xmltag="2750-reporting-category" minOccurs="0" maxOccurs="-1">
+                            <medi:segment segcode="N1\*(75).*" xmltag="reporting-category" name="N1" description="To identify a party by type of organization, name, and code" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                                <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:field xmltag="name" name="E93" required="true" minLength="1" maxLength="60" dataType="String"/>
+                                <medi:field xmltag="NA-identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="NA-identification-code" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                                <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                            </medi:segment>
+                            <medi:segment segcode="REF\*(00|17|18|19|26|3L|6M|9V|9X|GE|LU|PID|XX1|XX2|YY|ZZ).*" xmltag="reporting-category-reference" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="16">
+                                <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:field xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                                <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                                <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                    <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="50" dataType="String"/>
+                                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                                    <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="false" minLength="2" maxLength="3" dataType="String"/>
+                                    <medi:component xmltag="reference-identification" name="E127" required="false" minLength="1" maxLength="50" dataType="String"/>
+                                </medi:field>
+                            </medi:segment>
+                            <medi:segment segcode="DTP\*(007)\*(D8|RD8).*" xmltag="reporting-category-date" name="DTP" description="To specify any or all of a date, or a time period" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                                <medi:field xmltag="date-time-qualifier" name="E374" required="true" minLength="3" maxLength="3" dataType="String"/>
+                                <medi:field xmltag="date-time-period-format-qualifier" name="E1250" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:field xmltag="date-time-period" name="E1251" required="true" minLength="1" maxLength="35" dataType="String"/>
+                            </medi:segment>
+                        </medi:segmentGroup>
+                    </medi:segmentGroup>
+                </medi:segmentGroup>
+            </medi:segmentGroup>
+            <medi:segment segcode="SE\*.*" xmltag="transaction-set-trailer" name="SE" description="To indicate the end of the transaction set and provide the count of the transmitted segments (including the beginning (ST) and ending (SE) segments)" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="transaction-segment-count" name="E96" required="true" minLength="1" maxLength="10" dataType="Integer"/>
+                <medi:field xmltag="transaction-set-control-number" name="E329" required="true" minLength="4" maxLength="9" dataType="String"/>
+            </medi:segment>
+        </medi:segmentGroup>
+    </medi:segments>
+</medi:edimap>

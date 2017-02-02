@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<medi:edimap xmlns:medi="http://www.milyn.org/schema/edi-message-mapping-1.6.xsd">
+    <medi:description name="Health Care Claim Payment/Advice" version="1.0"/>
+    <medi:delimiters segment="~" field="*" component=":" sub-component=""/>
+    <medi:segments xmltag="edi" name="HP835" ignoreUnmappedSegments="true">
+        <medi:segmentGroup xmltag="transaction" minOccurs="1" maxOccurs="-1">
+            <medi:segment segcode="ST\*(835).*" xmltag="transaction-set-header" name="ST" description="To indicate the start of a transaction set and assign a control number" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="transaction-set-identifier-code" name="E143" required="true" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="transaction-set-control-number" name="E329" required="true" minLength="4" maxLength="9" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="BPR\*(C|D|H|I|P|U|X)\*.*\*(C|D)\*(ACH|BOP|CHK|FWT|NON).*" xmltag="financial-information" name="BPR" description="To indicate the beginning of a Payment Order/Remittance Advice Transaction Set and total payment amount, or to enable related transfer of funds and/or information from payer to payee to occur" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="transaction-handling-code" name="E305" required="true" minLength="1" maxLength="2" dataType="String"/>
+                <medi:field xmltag="monetary-amount" name="E782" required="true" minLength="1" maxLength="11" dataType="Float"/>
+                <medi:field xmltag="credit-or-debit-flag-code" name="E478" required="true" minLength="1" maxLength="1" dataType="String"/>
+                <medi:field xmltag="payment-method-code" name="E591" required="true" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="payment-format-code" name="E812" required="false" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="depository-financial-institution-dfi-identification-number-qualifier" name="E506" required="false" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="sender-dfi-number" name="E507" required="false" minLength="3" maxLength="12" dataType="String"/>
+                <medi:field xmltag="account-number-qualifier" name="E569" required="false" minLength="1" maxLength="3" dataType="String"/>
+                <medi:field xmltag="sender-bank-account-number" name="E508" required="false" minLength="1" maxLength="35" dataType="String"/>
+                <medi:field xmltag="payer-identifier" name="E509" required="false" minLength="10" maxLength="10" dataType="String"/>
+                <medi:field xmltag="originating-company-supplemental-code" name="E510" required="false" minLength="9" maxLength="9" dataType="String"/>
+                <medi:field xmltag="depository-financial-institution-dfi-identification-number-qualifier" name="E506" required="false" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="receiver-or-provider-bank-id-number" name="E507" required="false" minLength="3" maxLength="12" dataType="String"/>
+                <medi:field xmltag="account-number-qualifier" name="E569" required="false" minLength="1" maxLength="3" dataType="String"/>
+                <medi:field xmltag="receiver-or-provider-account-number" name="E508" required="false" minLength="1" maxLength="35" dataType="String"/>
+                <medi:field xmltag="check-issue-or-eft-effective-date" name="E373" required="true" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="NA-business-function-code" name="E1048" required="false" minLength="1" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-dfi-id-number-qualifier" name="E506" required="false" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="NA-dfi-identification-number" name="E507" required="false" minLength="3" maxLength="12" dataType="String"/>
+                <medi:field xmltag="NA-account-number-qualifier" name="E569" required="false" minLength="1" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-account-number" name="E508" required="false" minLength="1" maxLength="35" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="TRN\*(1).*" xmltag="reassociation-trace-number" name="TRN" description="To uniquely identify a transaction to an application" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="trace-type-code" name="E481" required="true" minLength="1" maxLength="2" dataType="String"/>
+                <medi:field xmltag="check-or-eft-trace-number" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                <medi:field xmltag="payer-identifier" name="E509" required="true" minLength="10" maxLength="10" dataType="String"/>
+                <medi:field xmltag="originating-company-supplemental-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="CUR\*(PR).*" xmltag="foreign-currency-information" name="CUR" description="To specify the currency (dollars, pounds, francs, etc) used in a transaction" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                <medi:field xmltag="currency-code" name="E100" required="true" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="exchange-rate" name="E280" required="false" minLength="4" maxLength="10" dataType="Float"/>
+                <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-currency-code" name="E100" required="false" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-currency-market-exchange-code" name="E669" required="false" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-date-time-qualifier" name="E374" required="false" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-date" name="E373" required="false" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="NA-time" name="E337" required="false" minLength="4" maxLength="4" dataType="String"/>
+                <medi:field xmltag="NA-date-time-qualifier" name="E374" required="false" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-date" name="E373" required="false" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="NA-time" name="E337" required="false" minLength="4" maxLength="4" dataType="String"/>
+                <medi:field xmltag="NA-date-time-qualifier" name="E374" required="false" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-date" name="E373" required="false" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="NA-time" name="E337" required="false" minLength="4" maxLength="4" dataType="String"/>
+                <medi:field xmltag="NA-date-time-qualifier" name="E374" required="false" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-date" name="E373" required="false" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="NA-time" name="E337" required="false" minLength="4" maxLength="4" dataType="String"/>
+                <medi:field xmltag="NA-date-time-qualifier" name="E374" required="false" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-date" name="E373" required="false" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="NA-time" name="E337" required="false" minLength="4" maxLength="4" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="REF\*(EV).*" xmltag="receiver-identification" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                <medi:field xmltag="receiver-identifier" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                </medi:field>
+            </medi:segment>
+            <medi:segment segcode="REF\*(F2).*" xmltag="version-identification" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                <medi:field xmltag="version-identification-code" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                    <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                </medi:field>
+            </medi:segment>
+            <medi:segment segcode="DTM\*(405).*" xmltag="production-date" name="DTM" description="To specify pertinent dates and times" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                <medi:field xmltag="date-time-qualifier" name="E374" required="true" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="production-date" name="E373" required="true" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="NA-time" name="E337" required="false" minLength="4" maxLength="4" dataType="String"/>
+                <medi:field xmltag="NA-time-code" name="E623" required="false" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="NA-date-time-period-format-qualifier" name="E1250" required="false" minLength="2" maxLength="3" dataType="String"/>
+                <medi:field xmltag="NA-date-time-period" name="E1251" required="false" minLength="1" maxLength="35" dataType="String"/>
+            </medi:segment>
+            <medi:segmentGroup xmltag="1000a-payer-identification" minOccurs="1" maxOccurs="-1">
+                <medi:segment segcode="N1\*(PR).*" xmltag="payer-identification" name="N1" description="To identify a party by type of organization, name, and code" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="payer-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="payer-identifier" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="N3\*.*" xmltag="payer-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="payer-address-line" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                    <medi:field xmltag="payer-address-line" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="N4\*.*" xmltag="payer-city-state-zip-code" name="N4" description="To specify the goegraphic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="payer-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                    <medi:field xmltag="payer-state-or-province-code" name="E156" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="payer-postal-zone-or-zip-code" name="E116" required="true" minLength="3" maxLength="15" dataType="String"/>
+                    <medi:field xmltag="NA-country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="REF\*(2U|EO|HI|NF).*" xmltag="additional-payer-identification" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="4">
+                    <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="additional-payer-identifier" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                    <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                    </medi:field>
+                </medi:segment>
+                <medi:segment segcode="PER\*(CX).*" xmltag="payer-contact-information" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="payer-contact-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="communication-number" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-contact-inquiry-reference" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                </medi:segment>
+            </medi:segmentGroup>
+            <medi:segmentGroup xmltag="1000b-payee-identification" minOccurs="1" maxOccurs="-1">
+                <medi:segment segcode="N1\*(PE)\*.*\*(FI|XX).*" xmltag="payee-identification" name="N1" description="To identify a party by type of organization, name, and code" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                    <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="payee-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                    <medi:field xmltag="identification-code-qualifier" name="E66" required="true" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="payee-identification-code" name="E67" required="true" minLength="2" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="N3\*.*" xmltag="payee-address" name="N3" description="To specify the location of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="payee-address-line" name="E166" required="true" minLength="1" maxLength="55" dataType="String"/>
+                    <medi:field xmltag="payee-address-line" name="E166" required="false" minLength="1" maxLength="55" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="N4\*.*" xmltag="payee-city-state-zip-code" name="N4" description="To specify the goegraphic place of the named party" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="payee-city-name" name="E19" required="true" minLength="2" maxLength="30" dataType="String"/>
+                    <medi:field xmltag="payee-state-or-province-code" name="E156" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="payee-postal-zone-or-zip-code" name="E116" required="true" minLength="3" maxLength="15" dataType="String"/>
+                    <medi:field xmltag="country-code" name="E26" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="NA-location-qualifier" name="E309" required="false" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="NA-location-identifier" name="E310" required="false" minLength="1" maxLength="30" dataType="String"/>
+                </medi:segment>
+                <medi:segment segcode="REF\*(0B|1A|1B|1C|1E|1F|1G|1H|D3|G2|N5|PQ|TJ).*" xmltag="payee-additional-identification" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="-1">
+                    <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="additional-payee-identifier" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                    <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                    <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                    </medi:field>
+                </medi:segment>
+            </medi:segmentGroup>
+            <medi:segmentGroup xmltag="2000-header-number" minOccurs="0" maxOccurs="-1">
+                <medi:segment segcode="LX\*.*" xmltag="header-number" name="LX" description="To reference a line number in a transaction set" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="assigned-number" name="E554" required="true" minLength="1" maxLength="6" dataType="Integer"/>
+                </medi:segment>
+                <medi:segment segcode="TS3\*.*" xmltag="provider-summary-information" name="TS3" description="To supply provider-level control information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="provider-identifier" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                    <medi:field xmltag="facility-type-code" name="E1331" required="true" minLength="1" maxLength="2" dataType="String"/>
+                    <medi:field xmltag="fiscal-period-date" name="E373" required="true" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                    <medi:field xmltag="total-claim-count" name="E380" required="true" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:field xmltag="total-claim-charge-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-covered-charge-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-noncovered-charge-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-denied-charge-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-provider-payment-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-interest-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-contractual-adjustment-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-gramm-rudman-reduction-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-msp-payer-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-blood-deductible-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-non-lab-charge-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-coinsurance-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-hcpcs-reported-charge-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-hcpcs-payable-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-deductible-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-professional-component-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-msp-patient-liability-met-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-patient-reimbursement-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-pip-claim-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:field xmltag="total-pip-adjustment-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                </medi:segment>
+                <medi:segment segcode="TS2\*.*" xmltag="provider-supplemental-summary-information" name="TS2" description="To supply supplemental summary control information by provider fiscal year and bill type" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="total-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-federal-specific-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-hospital-specific-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-disproportionate-share-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-capital-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-indirect-medical-education-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-outlier-day-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:field xmltag="total-day-outlier-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-cost-outlier-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="average-drg-length-of-stay" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:field xmltag="total-discharge-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:field xmltag="total-cost-report-day-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:field xmltag="total-covered-day-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:field xmltag="total-noncovered-day-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:field xmltag="total-msp-pass-through-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="average-drg-weight" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    <medi:field xmltag="total-pps-capital-fsp-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-pps-capital-hsp-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    <medi:field xmltag="total-pps-dsh-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                </medi:segment>
+                <medi:segmentGroup xmltag="2100-claim-payment-information" minOccurs="1" maxOccurs="-1">
+                    <medi:segment segcode="CLP\*.*\*(1|2|3|4|5|10|13|15|16|17|19|20|21|22|23|25|27)\*.*\*.*\*.*\*(12|13|14|15|16|AM|CH|DS|HM|LM|MA|MB|MC|OF|TV|VA|WC).*" xmltag="claim-payment-information" name="CLP" description="To supply information common to all services of a claim" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                        <medi:field xmltag="patient-control-number" name="E1028" required="true" minLength="1" maxLength="38" dataType="String"/>
+                        <medi:field xmltag="claim-status-code" name="E1029" required="true" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="total-claim-charge-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="claim-payment-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="patient-responsibility-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="claim-filing-indicator-code" name="E1032" required="true" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="payer-claim-control-number" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="facility-type-code" name="E1331" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="claim-frequency-code" name="E1325" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="NA-patient-status-code" name="E1352" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="diagnosis-related-group-drg-code" name="E1354" required="false" minLength="1" maxLength="4" dataType="String"/>
+                        <medi:field xmltag="diagnosis-related-group-drg-weight" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="discharge-fraction" name="E954" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                    </medi:segment>
+                    <medi:segment segcode="CAS\*(CO|CR|OA|PI|PR).*" xmltag="claim-adjustment" name="CAS" description="To supply adjustment reason codes and amounts as needed for an entire claim or for a particular service within the claim being paid" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="99">
+                        <medi:field xmltag="claim-adjustment-group-code" name="E1033" required="true" minLength="1" maxLength="12" dataType="String"/>
+                        <medi:field xmltag="adjustment-reason-code" name="E1034" required="true" minLength="1" maxLength="5" dataType="String"/>
+                        <medi:field xmltag="adjustment-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                        <medi:field xmltag="adjustment-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                        <medi:field xmltag="adjustment-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                        <medi:field xmltag="adjustment-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                        <medi:field xmltag="adjustment-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                        <medi:field xmltag="adjustment-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                    </medi:segment>
+                    <medi:segment segcode="NM1\*(QC)\*(1).*" xmltag="patient-name" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="patient-last-name" name="E1035" required="true" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="patient-first-name" name="E1036" required="true" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="patient-middle-name-or-initial" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="NA-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="patient-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="patient-identifier" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="NM1\*(IL)\*(1|2)\*.*\*.*\*.*\*.*\*.*\*(34|HN|MI).*" xmltag="insured-name" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="subscriber-last-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="subscriber-first-name" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="subscriber-middle-name-or-initial" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="NA-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="subscriber-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="true" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="subscriber-identifier" name="E67" required="true" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="NM1\*(74)\*(1|2).*" xmltag="corrected-patient-insured-name" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="corrected-patient-or-insured-last-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="corrected-patient-or-insured-first-name" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="corrected-patient-or-insured-middle-name-or-initial" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="NA-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="corrected-patient-or-insured-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="false" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="corrected-insured-identification-indicator" name="E67" required="false" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="NM1\*(82)\*(1|2)\*.*\*.*\*.*\*.*\*.*\*(BD|BS|FI|MC|PC|SL|UP|XX).*" xmltag="service-provider-name" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="rendering-provider-last-or-organization-name" name="E1035" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="rendering-provider-first-name" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="rendering-provider-middle-name-or-initial" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="NA-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="rendering-provider-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="true" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="rendering-provider-identifier" name="E67" required="true" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="NM1\*(TT)\*(2)\*.*\*.*\*.*\*.*\*.*\*(AD|FI|NI|PI|PP|XV).*" xmltag="crossover-carrier-name" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="coordination-of-benefits-carrier-name" name="E1035" required="true" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="NA-name-first" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="NA-name-middle" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="NA-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="NA-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="true" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="coordination-of-benefits-carrient-identifier" name="E67" required="true" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="NM1\*(PR)\*(2)\*.*\*.*\*.*\*.*\*.*\*(AD|FI|NI|PI|PP|XV).*" xmltag="corrected-priority-payer-name" name="NM1" description="To supply the full name of an individual or organizational entity" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="entity-identifier-code" name="E98" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="entity-type-qualifier" name="E1065" required="true" minLength="1" maxLength="1" dataType="String"/>
+                        <medi:field xmltag="corrected-priority-payer-name" name="E1035" required="true" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="NA-name-first" name="E1036" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        <medi:field xmltag="NA-name-middle" name="E1037" required="false" minLength="1" maxLength="25" dataType="String"/>
+                        <medi:field xmltag="NA-name-prefix" name="E1038" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="NA-name-suffix" name="E1039" required="false" minLength="1" maxLength="10" dataType="String"/>
+                        <medi:field xmltag="identification-code-qualifier" name="E66" required="true" minLength="1" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="corrected-priority-payer-identification-number" name="E67" required="true" minLength="2" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-entity-relationship-code" name="E706" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-entity-identifier-code" name="E98" required="false" minLength="2" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="MIA\*.*" xmltag="inpatient-adjudication-information" name="MIA" description="To provide claim-level data related to the adjudication of Medicare inpatient claims" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="covered-days-or-visits-count" name="E380" required="true" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="pps-operating-outlier-amount" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="lifetime-psychiatric-days-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="claim-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="claim-disproportionate-share-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="claim-msp-pass-through-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="claim-pps-capital-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="pps-capital-fsp-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="pps-capital-hsp-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="pps-capital-dsh-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="old-capital-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="pps-capital-ime-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="pps-operating-hospital-specific-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="cost-report-day-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="pps-operating-federal-specific-drg-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="claim-pps-capital-outlier-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="claim-indirect-teaching-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="nonpayable-professional-component-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="pps-capital-exception-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    </medi:segment>
+                    <medi:segment segcode="MOA\*.*" xmltag="outpatient-adjudication-information" name="MOA" description="To convey claim-level data related to the adjudication of Medicare claims not related to an inpatient setting" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="reimbursement-rate" name="E954" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                        <medi:field xmltag="claim-hcpcs-payable-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="remark-code" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="claim-esrd-payment-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="nonpayable-professional-component-amount" name="E782" required="false" minLength="1" maxLength="18" dataType="Float"/>
+                    </medi:segment>
+                    <medi:segment segcode="REF\*(1L|1W|9A|9C|A6|BB|CE|EA|F8|G1|G3|IG|SY).*" xmltag="other-claim-related-identification" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="5">
+                        <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="other-claim-related-identifier" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                        </medi:field>
+                    </medi:segment>
+                    <medi:segment segcode="REF\*(1A|1B|1C|1D|1G|1H|D3|G2).*" xmltag="rendering-provider-identification" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="10">
+                        <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="rendering-provider-secondary-identifier" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                        <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                            <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                        </medi:field>
+                    </medi:segment>
+                    <medi:segment segcode="DTM\*(036|050|232|233).*" xmltag="claim-date" name="DTM" description="To specify pertinent dates and times" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="4">
+                        <medi:field xmltag="date-time-qualifier" name="E374" required="true" minLength="3" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="claim-date" name="E373" required="true" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                        <medi:field xmltag="NA-time" name="E337" required="false" minLength="4" maxLength="4" dataType="String"/>
+                        <medi:field xmltag="NA-time-code" name="E623" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="NA-date-time-period-format-qualifier" name="E1250" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-date-time-period" name="E1251" required="false" minLength="1" maxLength="35" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="PER\*(CX).*" xmltag="claim-contact-information" name="PER" description="To identify a person or office to whom administrative communications should be directed" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="2">
+                        <medi:field xmltag="contact-function-code" name="E366" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="claim-contact-name" name="E93" required="false" minLength="1" maxLength="60" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="claim-contact-communication-number" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="claim-contact-communication-number" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="communication-number-qualifier" name="E365" required="false" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="claim-contact-communication-number-extension" name="E364" required="false" minLength="1" maxLength="80" dataType="String"/>
+                        <medi:field xmltag="NA-contact-inquiry-reference" name="E443" required="false" minLength="1" maxLength="20" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="AMT\*(AU|D8|DY|F5|I|NL|T|T2|ZK|ZL|ZM|ZN|ZO|ZZ).*" xmltag="claim-supplemental-information" name="AMT" description="To indicate the total monetary amount" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="13">
+                        <medi:field xmltag="amount-qualifier-code" name="E522" required="true" minLength="1" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="claim-supplemental-information-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                        <medi:field xmltag="NA-credit-debit-flag-code" name="E478" required="false" minLength="1" maxLength="1" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="QTY\*(CA|CD|LA|LE|NA|NE|NR|OU|PS|VS|ZK|ZL|ZM|ZN|ZO).*" xmltag="claim-supplemental-information-quantity" name="QTY" description="To specify quantity information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="14">
+                        <medi:field xmltag="quantity-qualifier" name="E673" required="true" minLength="2" maxLength="2" dataType="String"/>
+                        <medi:field xmltag="claim-supplemental-information-quantity" name="E380" required="true" minLength="1" maxLength="15" dataType="Float"/>
+                        <medi:field xmltag="composite-unit-of-measure" name="C001" required="false" truncatable="true">
+                            <medi:component xmltag="unit-or-basis-for-measurement-code" name="E355" required="true" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:component xmltag="exponent" name="E1018" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                            <medi:component xmltag="multiplier" name="E649" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                            <medi:component xmltag="unit-or-basis-for-measurement-code" name="E355" required="false" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:component xmltag="exponent" name="E1018" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                            <medi:component xmltag="multiplier" name="E649" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                        </medi:field>
+                        <medi:field xmltag="NA-free-form-information" name="E61" required="false" minLength="1" maxLength="30" dataType="String"/>
+                    </medi:segment>
+                    <medi:segmentGroup xmltag="2110-service-payment-information" minOccurs="0" maxOccurs="-1">
+                        <medi:segment segcode="SVC\*.*" xmltag="service-payment-information" name="SVC" description="To supply payment and control information to a provider for a particular service" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                            <medi:field xmltag="composite-medical-procedure-identifier" name="C003" required="true" truncatable="true">
+                                <medi:component xmltag="product-or-service-id-qualifier" name="E235" required="true" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-code" name="E234" required="true" minLength="1" maxLength="48" dataType="String"/>
+                                <medi:component xmltag="procedure-modifier" name="E1339" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-modifier" name="E1339" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-modifier" name="E1339" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-modifier" name="E1339" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-code-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                            </medi:field>
+                            <medi:field xmltag="line-item-charge-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                            <medi:field xmltag="line-item-provider-payment-amount" name="E782" required="true" minLength="1" maxLength="18" dataType="Float"/>
+                            <medi:field xmltag="national-uniform-billing-committee-revenue-code" name="E234" required="false" minLength="1" maxLength="48" dataType="String"/>
+                            <medi:field xmltag="units-of-service-paid-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                            <medi:field xmltag="composite-medical-procedure-identifier" name="C003" required="false" truncatable="true">
+                                <medi:component xmltag="product-or-service-id-qualifier" name="E235" required="true" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-code" name="E234" required="true" minLength="1" maxLength="48" dataType="String"/>
+                                <medi:component xmltag="procedure-modifier" name="E1339" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-modifier" name="E1339" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-modifier" name="E1339" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-modifier" name="E1339" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="procedure-code-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                            </medi:field>
+                            <medi:field xmltag="original-units-of-service-count" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        </medi:segment>
+                        <medi:segment segcode="DTM\*(150|151|472).*" xmltag="service-date" name="DTM" description="To specify pertinent dates and times" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="2">
+                            <medi:field xmltag="date-time-qualifier" name="E374" required="true" minLength="3" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="service-date" name="E373" required="true" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                            <medi:field xmltag="NA-time" name="E337" required="false" minLength="4" maxLength="4" dataType="String"/>
+                            <medi:field xmltag="NA-time-code" name="E623" required="false" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="NA-date-time-period-format-qualifier" name="E1250" required="false" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="NA-date-time-period" name="E1251" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        </medi:segment>
+                        <medi:segment segcode="CAS\*(CO|CR|OA|PI|PR).*" xmltag="service-adjustment" name="CAS" description="To supply adjustment reason codes and amounts as needed for an entire claim or for a particular service within the claim being paid" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="99">
+                            <medi:field xmltag="claim-adjustment-group-code" name="E1033" required="true" minLength="1" maxLength="12" dataType="String"/>
+                            <medi:field xmltag="adjustment-reason-code" name="E1034" required="true" minLength="1" maxLength="5" dataType="String"/>
+                            <medi:field xmltag="monetary-amount" name="E782" required="true" minLength="1" maxLength="10" dataType="Float"/>
+                            <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                            <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                            <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                            <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                            <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                            <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                            <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                            <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                            <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                            <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                            <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                            <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                            <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                            <medi:field xmltag="adjustment-reason-code" name="E1034" required="false" minLength="1" maxLength="5" dataType="String"/>
+                            <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                            <medi:field xmltag="adjustment-quantity" name="E380" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                        </medi:segment>
+                        <medi:segment segcode="REF\*(1S|6R|BB|E9|G1|G3|LU|RB).*" xmltag="service-identification" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="8">
+                            <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="provider-identifier" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                            <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                            <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                                <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                                <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                                <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                            </medi:field>
+                        </medi:segment>
+                        <medi:segment segcode="REF\*(1A|1B|1C|1D|1G|1H|1J|SY|TJ|HPI).*" xmltag="rendering-provider-information" name="REF" description="To specify identifying information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="10">
+                            <medi:field xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="rendering-provider-identifier" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                            <medi:field xmltag="NA-description" name="E352" required="false" minLength="1" maxLength="80" dataType="String"/>
+                            <medi:field xmltag="reference-identifier" name="C040" required="false" truncatable="true">
+                                <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                                <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                                <medi:component xmltag="reference-identification-qualifier" name="E128" required="true" minLength="2" maxLength="3" dataType="String"/>
+                                <medi:component xmltag="reference-identification" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                            </medi:field>
+                        </medi:segment>
+                        <medi:segment segcode="AMT\*(B6|DY|KH|NE|T|T2|ZK|ZL|ZM|ZN|ZO).*" xmltag="service-supplemental-amount" name="AMT" description="To indicate the total monetary amount" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="9">
+                            <medi:field xmltag="amount-qualifier-code" name="E522" required="true" minLength="1" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="monetary-amount" name="E782" required="true" minLength="1" maxLength="10" dataType="Float"/>
+                            <medi:field xmltag="NA-credit-debit-flag-code" name="E478" required="false" minLength="1" maxLength="1" dataType="String"/>
+                        </medi:segment>
+                        <medi:segment segcode="QTY\*(NE|ZK|ZL|ZM|ZN|ZO).*" xmltag="service-supplemental-quantity" name="QTY" description="To specify quantity information" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="6">
+                            <medi:field xmltag="quantity-qualifier" name="E673" required="true" minLength="2" maxLength="2" dataType="String"/>
+                            <medi:field xmltag="service-supplemental-quantity-count" name="E380" required="true" minLength="1" maxLength="15" dataType="Float"/>
+                            <medi:field xmltag="composite-unit-of-measure" name="C001" required="false" truncatable="true">
+                                <medi:component xmltag="unit-or-basis-for-measurement-code" name="E355" required="true" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="exponent" name="E1018" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                                <medi:component xmltag="multiplier" name="E649" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                                <medi:component xmltag="unit-or-basis-for-measurement-code" name="E355" required="false" minLength="2" maxLength="2" dataType="String"/>
+                                <medi:component xmltag="exponent" name="E1018" required="false" minLength="1" maxLength="15" dataType="Float"/>
+                                <medi:component xmltag="multiplier" name="E649" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                            </medi:field>
+                            <medi:field xmltag="NA-free-form-information" name="E61" required="false" minLength="1" maxLength="30" dataType="String"/>
+                        </medi:segment>
+                        <medi:segment segcode="LQ\*(HE|RX).*" xmltag="health-care-remark-codes" name="LQ" description="To identify standard industry codes" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="99">
+                            <medi:field xmltag="code-list-qualifier-code" name="E1270" required="true" minLength="1" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="remark-code" name="E1271" required="true" minLength="1" maxLength="30" dataType="String"/>
+                        </medi:segment>
+                    </medi:segmentGroup>
+                </medi:segmentGroup>
+            </medi:segmentGroup>
+            <medi:segment segcode="PLB\*.*" xmltag="provider-adjustment" name="PLB" description="To convey provider level adjustment information for debit or credit transactions such as, accelerated payments, cost report settlements for a fiscal year, and timeliness report penalties unrelated to a specific claim or service" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="-1">
+                <medi:field xmltag="provider-identifier" name="E127" required="true" minLength="1" maxLength="30" dataType="String"/>
+                <medi:field xmltag="fiscal-period-date" name="E373" required="true" minLength="8" maxLength="8" dataType="Date" dataTypeParameters="format=yyyyMMdd"/>
+                <medi:field xmltag="adjustment-identifier" name="C042" required="true" truncatable="true">
+                    <medi:component xmltag="adjustment-reason-code" name="E426" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="provider-adjustment-identifier" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                </medi:field>
+                <medi:field xmltag="monetary-amount" name="E782" required="true" minLength="1" maxLength="10" dataType="Float"/>
+                <medi:field xmltag="adjustment-identifier" name="C042" required="false" truncatable="true">
+                    <medi:component xmltag="adjustment-reason-code" name="E426" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="provider-adjustment-identifier" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                </medi:field>
+                <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                <medi:field xmltag="adjustment-identifier" name="C042" required="false" truncatable="true">
+                    <medi:component xmltag="adjustment-reason-code" name="E426" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="provider-adjustment-identifier" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                </medi:field>
+                <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                <medi:field xmltag="adjustment-identifier" name="C042" required="false" truncatable="true">
+                    <medi:component xmltag="adjustment-reason-code" name="E426" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="provider-adjustment-identifier" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                </medi:field>
+                <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                <medi:field xmltag="adjustment-identifier" name="C042" required="false" truncatable="true">
+                    <medi:component xmltag="adjustment-reason-code" name="E426" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="provider-adjustment-identifier" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                </medi:field>
+                <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+                <medi:field xmltag="adjustment-identifier" name="C042" required="false" truncatable="true">
+                    <medi:component xmltag="adjustment-reason-code" name="E426" required="true" minLength="2" maxLength="2" dataType="String"/>
+                    <medi:component xmltag="provider-adjustment-identifier" name="E127" required="false" minLength="1" maxLength="30" dataType="String"/>
+                </medi:field>
+                <medi:field xmltag="monetary-amount" name="E782" required="false" minLength="1" maxLength="10" dataType="Float"/>
+            </medi:segment>
+            <medi:segment segcode="SE\*.*" xmltag="transaction-set-trailer" name="SE" description="To indicate the end of the transaction set and provide the count of the transmitted segments (including the beginning (ST) and ending (SE) segments)" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="transaction-segment-count" name="E96" required="true" minLength="1" maxLength="10" dataType="Integer"/>
+                <medi:field xmltag="transaction-set-control-number" name="E329" required="true" minLength="4" maxLength="9" dataType="String"/>
+            </medi:segment>
+        </medi:segmentGroup>
+    </medi:segments>
+</medi:edimap>

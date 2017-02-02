@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<medi:edimap xmlns:medi="http://www.milyn.org/schema/edi-message-mapping-1.6.xsd">
+    <medi:description name="Implementation Acknowledgment" version="1.0"/>
+    <medi:delimiters segment="~" field="*" component=":" sub-component=""/>
+    <medi:segments xmltag="edi" name="FA999" ignoreUnmappedSegments="true">
+        <medi:segmentGroup xmltag="transaction" minOccurs="1" maxOccurs="-1">
+            <medi:segment segcode="ST\*(999)\*.*\*(005010X231).*" xmltag="transaction-set-header" name="ST" description="To indicate the start of a transaction set and assign a control number" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="transaction-set-identifier-code" name="E143" required="true" minLength="3" maxLength="3" dataType="String"/>
+                <medi:field xmltag="transaction-set-control-number" name="E329" required="true" minLength="4" maxLength="9" dataType="String"/>
+                <medi:field xmltag="implementation-guide-version-name" name="E1705" required="true" minLength="1" maxLength="35" dataType="String"/>
+            </medi:segment>
+            <medi:segment segcode="AK1\*(BE|FA|HC|HI|HN|HP|HS|HR|RA).*" xmltag="functional-group-response-header" name="AK1" description="To start acknowledgement of a functional group" truncatable="true" ignoreUnmappedFields="true" minOccurs="1" maxOccurs="1">
+                <medi:field xmltag="functional-identifier-code" name="E479" required="true" minLength="2" maxLength="2" dataType="String"/>
+                <medi:field xmltag="group-control-number" name="E28" required="true" minLength="1" maxLength="9" dataType="Integer"/>
+                <medi:field xmltag="version-release-or-industry-identifier-code" name="E480" required="true" minLength="1" maxLength="12" dataType="String"/>
+            </medi:segment>
+            <medi:segmentGroup xmltag="2000-transaction-set-response-header" minOccurs="0" maxOccurs="-1">
+                <medi:segment segcode="AK2\*(277|834|835|837|999).*" xmltag="transaction-set-response-header" name="AK2" description="To start acknowledgement of a single transaction set" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                    <medi:field xmltag="transaction-set-identifier-code" name="E143" required="true" minLength="3" maxLength="3" dataType="String"/>
+                    <medi:field xmltag="transaction-set-control-number" name="E329" required="true" minLength="4" maxLength="9" dataType="String"/>
+                    <medi:field xmltag="implementation-convention-reference" name="E1705" required="false" minLength="1" maxLength="35" dataType="String"/>
+                </medi:segment>
+                <medi:segmentGroup xmltag="2100-error-identification" minOccurs="0" maxOccurs="-1">
+                    <medi:segment segcode="IK3\*.*\*.*\*.*\*(1|2|3|4|5|6|7|8|I4|I6|I7|I8|I9).*" xmltag="error-identification" name="IK3" description="To start acknowledgement of a single transaction set" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="segment-id-code" name="E721" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="segment-position-in-transaction-set" name="E719" required="true" minLength="1" maxLength="10" dataType="Integer"/>
+                        <medi:field xmltag="loop-identifier-code" name="E447" required="false" minLength="1" maxLength="4" dataType="String"/>
+                        <medi:field xmltag="implementation-segment-syntax-error-code" name="E620" required="true" minLength="1" maxLength="3" dataType="String"/>
+                    </medi:segment>
+                    <medi:segment segcode="CTX\*.*" xmltag="segment-context" name="CTX" description="Describes an event context in terms of the application or implementation context in force at the time the event occurred and the position in the EDI stream at which that context was activated" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="9">
+                        <medi:field xmltag="context-identification" name="C998" required="true" truncatable="true">
+                            <medi:component xmltag="context-name" name="E9998" required="true" minLength="1" maxLength="35" dataType="String"/>
+                            <medi:component xmltag="context-reference" name="E9998" required="false" minLength="1" maxLength="35" dataType="String"/>
+                        </medi:field>
+                        <medi:field xmltag="segment-id-code" name="E721" required="true" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="segment-position-in-transaction-set" name="E719" required="true" minLength="1" maxLength="10" dataType="Integer"/>
+                        <medi:field xmltag="loop-identifier-code" name="E447" required="false" minLength="1" maxLength="4" dataType="String"/>
+                        <medi:field xmltag="position-in-segment" name="C030" required="false" truncatable="true">
+                            <medi:component xmltag="element-position-in-segment" name="E722" required="true" minLength="1" maxLength="2" dataType="Integer"/>
+                            <medi:component xmltag="component-data-element-position-in-composite" name="E1528" required="false" minLength="1" maxLength="2" dataType="Integer"/>
+                            <medi:component xmltag="repeating-data-element-position" name="E1686" required="false" minLength="1" maxLength="4" dataType="Integer"/>
+                        </medi:field>
+                        <medi:field xmltag="reference-in-segment" name="C999" required="false" truncatable="true">
+                            <medi:component xmltag="data-element-reference-number" name="E725" required="true" minLength="1" maxLength="4" dataType="Integer"/>
+                            <medi:component xmltag="component-data-element-reference-number" name="E725" required="false" minLength="1" maxLength="4" dataType="Integer"/>
+                        </medi:field>
+                    </medi:segment>
+                    <medi:segment segcode="CTX\*.*" xmltag="business-unit-identifier" name="CTX" description="Describes an event context in terms of the application or implementation context in force at the time the event occurred and the position in the EDI stream at which that context was activated" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                        <medi:field xmltag="context-identification" name="C998" required="true" truncatable="true">
+                            <medi:component xmltag="context-name" name="E9998" required="true" minLength="1" maxLength="35" dataType="String"/>
+                            <medi:component xmltag="context-reference" name="E9998" required="true" minLength="1" maxLength="35" dataType="String"/>
+                        </medi:field>
+                        <medi:field xmltag="NA-segment-id-code" name="E721" required="false" minLength="2" maxLength="3" dataType="String"/>
+                        <medi:field xmltag="NA-segment-position-in-transaction-set" name="E719" required="false" minLength="1" maxLength="10" dataType="Integer"/>
+                        <medi:field xmltag="NA-loop-identifier-code" name="E447" required="false" minLength="1" maxLength="4" dataType="String"/>
+                        <medi:field xmltag="position-in-segment" name="C030" required="false" truncatable="true">
+                            <medi:component xmltag="element-position-in-segment" name="E722" required="true" minLength="1" maxLength="2" dataType="Integer"/>
+                            <medi:component xmltag="component-data-element-position-in-composite" name="E1528" required="false" minLength="1" maxLength="2" dataType="Integer"/>
+                            <medi:component xmltag="repeating-data-element-position" name="E1686" required="false" minLength="1" maxLength="4" dataType="Integer"/>
+                        </medi:field>
+                        <medi:field xmltag="reference-in-segment" name="C999" required="false" truncatable="true">
+                            <medi:component xmltag="data-element-reference-number" name="E725" required="true" minLength="1" maxLength="4" dataType="Integer"/>
+                            <medi:component xmltag="data-element-reference-number" name="E725" required="true" minLength="1" maxLength="4" dataType="Integer"/>
+                        </medi:field>
+                    </medi:segment>
+                    <medi:segmentGroup xmltag="2110-implementation-data-element-note" minOccurs="0" maxOccurs="-1">
+                        <medi:segment segcode="IK4\*.*\*.*\*(1|2|3|4|5|6|7|8|9|10|12|13|I6|I9|I10|I11|I12|I13).*" xmltag="implementation-data-element-note" name="IK4" description="To report implementation errors in a data element or composite data structure and identify the location of the data element" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="1">
+                            <medi:field xmltag="position-in-segment" name="C030" required="true" truncatable="true">
+                                <medi:component xmltag="element-position-in-segment" name="E722" required="true" minLength="1" maxLength="2" dataType="Integer"/>
+                                <medi:component xmltag="component-data-element-position-in-composite" name="E1528" required="false" minLength="1" maxLength="2" dataType="Integer"/>
+                                <medi:component xmltag="repeating-data-element-position" name="E1686" required="false" minLength="1" maxLength="4" dataType="Integer"/>
+                            </medi:field>
+                            <medi:field xmltag="data-element-reference-number" name="E725" required="false" minLength="1" maxLength="4" dataType="Integer"/>
+                            <medi:field xmltag="implementation-data-element-syntax-error-code" name="E621" required="true" minLength="1" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="copy-of-bad-data-element" name="E724" required="false" minLength="1" maxLength="99" dataType="String"/>
+                        </medi:segment>
+                        <medi:segment segcode="CTX\*.*" xmltag="element-context" name="CTX" description="Describes an event context in terms of the application or implementation context in force at the time the event occurred and the position in the EDI stream at which that context was activated" truncatable="true" ignoreUnmappedFields="true" minOccurs="0" maxOccurs="10">
+                            <medi:field xmltag="context-identification" name="C998" required="true" truncatable="true">
+                                <medi:component xmltag="context-name" name="E9998" required="true" minLength="1" maxLength="35" dataType="String"/>
+                                <medi:component xmltag="context-reference" name="E9998" required="false" minLength="1" maxLength="35" dataType="String"/>
+                            </medi:field>
+                            <medi:field xmltag="segment-id-code" name="E721" required="true" minLength="2" maxLength="3" dataType="String"/>
+                            <medi:field xmltag="segment-position-in-transaction-set" name="E719" required="true" minLength="1" maxLength="10" dataType="Integer"/>
+                            <medi:field xmltag="loop-identifier-code" name="E447" required="false" minLength="1" maxLength="4" dataType="String"/>
+                            <medi:field xmltag="position-in-segment" name="C030" required="false" truncatable="true">
+                                <medi:component xmltag="element-position-in-segment" name="E722" required="true" minLength="1" maxLength="2" dataType="Integer"/>
+                                <medi:component xmltag="component-data-element-position-in-composite" name="E1528" required="false" minLength="1" maxLength="2" dataType="Integer"/>
+                                <medi:component xmltag="repeating-data-element-position" name="E1686" required="false" minLength="1" maxLength="4" dataType="Integer"/>
+                            </medi:field>
+                            <medi:field xmltag="reference-in-segment" name="C999" required="false" truncatable="true">
+                                <medi:component xmltag="data-element-reference-number" name="E725" required="true" minLength="1" maxLength="4" dataType="Integer"/>
+                                <medi:component xmltag="component-data-element-reference-number" name="E725" required="false" minLength="1" maxLength="4" dataType="Integer"/>
+                            </medi:field>
+                        </medi:segment>
+                    </medi:segmentGroup>
+                </medi:segmentGroup>
+            </medi:segmentGroup>
+        </medi:segmentGroup>
+    </medi:segments>
+</medi:edimap>
