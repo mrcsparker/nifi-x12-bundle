@@ -1,6 +1,7 @@
 package org.apache.nifi.processors.x12;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class X12File {
     private String controlVersion;
@@ -36,6 +37,7 @@ public class X12File {
     }
 
     public void setIsaSegments(List<String> isaSegments) {
+        setControlVersion(isaSegments.get(12));
         this.isaSegments = isaSegments;
     }
 
@@ -52,11 +54,8 @@ public class X12File {
     }
 
     public void setStSegments(List<List<String>> stSegments) {
+        setIdentifierCode(stSegments.get(0).get(1));
         this.stSegments = stSegments;
-    }
-
-    public void addStSegment(List s) {
-        stSegments.add(s);
     }
 
     public List<String> getGeSegments() {
@@ -73,5 +72,23 @@ public class X12File {
 
     public void setIeaSegments(List<String> ieaSegments) {
         this.ieaSegments = ieaSegments;
+    }
+
+    public String toString() {
+
+        String header =
+                isaSegments.stream().collect(Collectors.joining("*")) + "~" +
+                        gsSegments.stream().collect(Collectors.joining("*")) + "~";
+
+        String footer =
+                geSegments.stream().collect(Collectors.joining("*")) + "~" +
+                        ieaSegments.stream().collect(Collectors.joining("*")) + "~";
+
+
+        String body = stSegments.stream()
+                .map((s) -> s.stream().collect(Collectors.joining("*")))
+                .collect(Collectors.joining("~"));
+
+        return header + body + footer;
     }
 }

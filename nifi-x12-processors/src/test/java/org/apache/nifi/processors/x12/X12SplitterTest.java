@@ -22,6 +22,9 @@ public class X12SplitterTest {
         inputStream.close();
 
         assertTrue(edi.size() == 1);
+        assertTrue(edi.get(0).toString().substring(0, 3).equals("ISA"));
+        assertTrue(edi.get(0).getControlVersion().equals("00401"));
+        assertTrue(edi.get(0).getIdentifierCode().equals("837"));
     }
 
     @Test
@@ -32,12 +35,19 @@ public class X12SplitterTest {
 
         X12Splitter x12Splitter = new X12Splitter(inputStream);
         List<X12File> edi = x12Splitter.split();
-        edi.forEach((e) -> System.out.println(e));
+
+        edi.forEach(System.out::println);
 
         inputStream.close();
-
-        System.out.println(edi.size());
+        
 
         assertTrue(edi.size() == 2);
+        assertTrue(edi.get(0).toString().substring(0, 3).equals("ISA"));
+        assertTrue(edi.get(0).getControlVersion().equals("00401"));
+        assertTrue(edi.get(0).getIdentifierCode().equals("837"));
+
+        assertTrue(edi.get(1).toString().substring(0, 3).equals("ISA"));
+        assertTrue(edi.get(1).getControlVersion().equals("00401"));
+        assertTrue(edi.get(1).getIdentifierCode().equals("837"));
     }
 }
