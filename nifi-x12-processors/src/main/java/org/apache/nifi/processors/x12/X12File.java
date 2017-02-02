@@ -1,12 +1,24 @@
 package org.apache.nifi.processors.x12;
 
+import org.milyn.Smooks;
+import org.milyn.container.ExecutionContext;
+import org.milyn.payload.StringResult;
+import org.milyn.payload.StringSource;
+import org.milyn.smooks.edi.EDIReaderConfigurator;
+import org.xml.sax.SAXException;
+
+import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class X12File {
     private String controlVersion;
     private String identifierCode;
-
 
     private List<String> isaSegments;
     private List<String> gsSegments;
@@ -14,70 +26,119 @@ public class X12File {
     private List<String> geSegments;
     private List<String> ieaSegments;
 
-    // ediList.stream().collect(Collectors.joining("~")
-
     public String getControlVersion() {
         return controlVersion;
     }
 
-    public void setControlVersion(String controlVersion) {
+    void setControlVersion(String controlVersion) {
         this.controlVersion = controlVersion;
     }
 
-    public String getIdentifierCode() {
+    String getIdentifierCode() {
         return identifierCode;
     }
 
-    public void setIdentifierCode(String identifierCode) {
+    void setIdentifierCode(String identifierCode) {
         this.identifierCode = identifierCode;
     }
 
-    public List<String> getIsaSegments() {
-        return isaSegments;
-    }
-
-    public void setIsaSegments(List<String> isaSegments) {
-        setControlVersion(isaSegments.get(12));
+    void setIsaSegments(List<String> isaSegments) {
         this.isaSegments = isaSegments;
     }
 
-    public List<String> getGsSegments() {
-        return gsSegments;
+    X12File withIsaSegments(List<String> isaSegments) {
+        this.setIsaSegments(isaSegments);
+        return this;
     }
 
-    public void setGsSegments(List<String> gsSegments) {
+    void setGsSegments(List<String> gsSegments) {
+        setControlVersion(gsSegments.get(8));
         this.gsSegments = gsSegments;
     }
 
-    public List<List<String>> getStSegments() {
+    X12File withGsSegments(List<String> gsSegments) {
+        setGsSegments(gsSegments);
+        return this;
+    }
+
+    List<List<String>> getStSegments() {
         return stSegments;
     }
 
-    public void setStSegments(List<List<String>> stSegments) {
+    void setStSegments(List<List<String>> stSegments) {
         setIdentifierCode(stSegments.get(0).get(1));
         this.stSegments = stSegments;
     }
 
-    public List<String> getGeSegments() {
-        return geSegments;
+    X12File withStSegments(List<List<String>> stSegments) {
+        setStSegments(stSegments);
+        return this;
     }
 
-    public void setGeSegments(List<String> geSegments) {
+    void setGeSegments(List<String> geSegments) {
         this.geSegments = geSegments;
     }
 
-    public List<String> getIeaSegments() {
-        return ieaSegments;
+    X12File withGeSegments(List<String> geSegments) {
+        setGeSegments(geSegments);
+        return this;
     }
 
-    public void setIeaSegments(List<String> ieaSegments) {
+    void setIeaSegments(List<String> ieaSegments) {
         this.ieaSegments = ieaSegments;
+    }
+
+    X12File withIeaSegments(List<String> ieaSegments) {
+        setIeaSegments(ieaSegments);
+        return this;
+    }
+
+    String getMappingModelFileName() {
+        return String.format("x12/%s-%s.xml", getControlVersion(), getIdentifierCode());
+    }
+
+    File getMappingModelFile() {
+        URL resourceURL = getClass().getClassLoader().getResource(getMappingModelFileName());
+        assert resourceURL != null;
+        return new File(resourceURL.getFile());
+    }
+
+    public String toXML() throws IOException, SAXException {
+
+        Locale defaultLocale = Locale.getDefault();
+        Locale.setDefault(new Locale("en", "IE"));
+
+        EDIReaderConfigurator ediReaderConfigurator = new EDIReaderConfigurator(getMappingModelFileName());
+
+        Smooks smooks = new Smooks("smooks-config.xml");
+        smooks.setReaderConfig(ediReaderConfigurator);
+
+        try {
+
+            // Create an exec context - no profiles
+            ExecutionContext executionContext = smooks.createExecutionContext();
+
+            StringResult result = new StringResult();
+
+            System.out.println(getMappingModelFileName());
+            System.out.println(toString());
+
+            // Filter the output message to the output writer, using the execution context
+            smooks.filterSource(executionContext, new StringSource(toString()), result);
+
+            Locale.setDefault(defaultLocale);
+
+            return result.getResult();
+        } finally {
+            smooks.close();
+        }
+
     }
 
     public String toString() {
 
         String header =
-                isaSegments.stream().collect(Collectors.joining("*")) + "~" +
+                isaSegments.stream().collect(Collectors.joining("*")) +
                         gsSegments.stream().collect(Collectors.joining("*")) + "~";
 
         String footer =

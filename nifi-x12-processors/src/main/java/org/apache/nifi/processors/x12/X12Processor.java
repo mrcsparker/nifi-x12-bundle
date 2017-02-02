@@ -29,12 +29,16 @@ import org.apache.nifi.annotation.documentation.SeeAlso;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.processor.exception.ProcessException;
 import org.milyn.Smooks;
-import org.milyn.edisax.model.internal.Delimiters;
-import org.milyn.edisax.model.internal.Edimap;
+import org.milyn.container.ExecutionContext;
+import org.milyn.payload.StringResult;
 import org.milyn.smooks.edi.EDIReaderConfigurator;
+import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 
 @Tags({"ansi", "edi", "x12"})
@@ -86,28 +90,37 @@ public class X12Processor extends AbstractProcessor {
 
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) throws ProcessException {
+
         FlowFile flowFile = session.get();
         if (flowFile == null) {
             return;
         }
 
-
-        InputStream inputStream = session.read(flowFile);
-
-
-        X12Splitter x12Splitter = new X12Splitter(inputStream);
         try {
+            InputStream inputStream = session.read(flowFile);
+
+            X12Splitter x12Splitter = new X12Splitter(inputStream);
             List<X12File> x12Files = x12Splitter.split();
+
+            x12Files.forEach((X12File x12file) -> {
+                try {
+                    System.out.println(x12file.toXML());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                }
+            });
+
+
+            inputStream.close();
+
+            System.out.println("Received a flow file");
+            session.transfer(flowFile, REL_SUCCESS);
+            session.commit();
         } catch (IOException e) {
             e.printStackTrace();
             session.transfer(flowFile, REL_FAILURE);
         }
-
-        Smooks smooks = new Smooks();
-        EDIReaderConfigurator ediReaderConfigurator = new EDIReaderConfigurator("smooks-config.xml");
-        smooks.setReaderConfig(ediReaderConfigurator);
-
-        System.out.println("Received a flow file");
-        session.transfer(flowFile, REL_SUCCESS);
     }
 }

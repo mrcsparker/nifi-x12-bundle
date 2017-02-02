@@ -1,9 +1,6 @@
 package org.apache.nifi.processors.x12;
 
 
-import org.apache.commons.io.IOUtils;
-import sun.nio.ch.IOUtil;
-
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.Pattern;

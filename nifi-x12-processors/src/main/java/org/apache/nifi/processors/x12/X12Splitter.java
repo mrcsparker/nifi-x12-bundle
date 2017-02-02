@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  *
  * @author <a href="mailto:mrcsparker@gmail.com">mrcsparker@gmail.com</a>
  */
-public class X12Splitter {
+class X12Splitter {
 
     private static final int HEADER_LENGTH = 106;
     private static final int SEGMENT_POSITION = 105;
@@ -53,17 +53,16 @@ public class X12Splitter {
             }
         }
         if (stSegments.size() > 0) {
-            x12File.setIsaSegments(isaSegments);
-            x12File.setGsSegments(gsSegments);
-            x12File.setStSegments(stSegments);
-            x12File.setIeaSegments(ieaSegments);
-            x12File.setGeSegments(geSegments);
-            baseList.add(x12File);
+            baseList.add(x12File.withIsaSegments(isaSegments)
+                                .withGsSegments(gsSegments)
+                                .withStSegments(stSegments)
+                                .withIeaSegments(ieaSegments)
+                                .withGeSegments(geSegments));
         }
         return baseList;
     }
 
-    List<String> scanSegment(String segment) {
+    private List<String> scanSegment(String segment) {
 
         List<String> l = new ArrayList<>();
 
@@ -76,12 +75,11 @@ public class X12Splitter {
         switch (l.get(0)) {
             case "ST":
                 if (stSegments.size() > 0) {
-                    x12File.setIsaSegments(isaSegments);
-                    x12File.setGsSegments(gsSegments);
-                    x12File.setStSegments(stSegments);
-                    x12File.setIeaSegments(ieaSegments);
-                    x12File.setGeSegments(geSegments);
-                    baseList.add(x12File);
+                    baseList.add(x12File.withIsaSegments(isaSegments)
+                                        .withGsSegments(gsSegments)
+                                        .withStSegments(stSegments)
+                                        .withIeaSegments(ieaSegments)
+                                        .withGeSegments(geSegments));
                     x12File = new X12File();
                 }
                 break;
@@ -99,18 +97,18 @@ public class X12Splitter {
         return l;
     }
 
-    List<String> scanHeaderSegment(String segment) {
+    private List<String> scanHeaderSegment(String segment) {
         List<String> l = new ArrayList<>();
         Scanner scanner = new Scanner(segment);
         scanner.useDelimiter(Pattern.quote(getElementSeparator().toString()));
         while (scanner.hasNext()) {
             String element = scanner.next().trim();
-            l.add(scanElement(element));
+            l.add(element);
         }
         return l;
     }
 
-    String scanElement(String element) {
+    private String scanElement(String element) {
         List<String> l = new ArrayList<>();
         Scanner scanner = new Scanner(element);
         scanner.useDelimiter(Pattern.quote(getCompositeElementSeparator().toString()));
@@ -120,7 +118,7 @@ public class X12Splitter {
         return l.stream().collect(Collectors.joining(":"));
     }
 
-    public void parseHeader() throws IOException {
+    private void parseHeader() throws IOException {
         char[] buf = new char[HEADER_LENGTH];
 
         int size = inputReader.read(buf);

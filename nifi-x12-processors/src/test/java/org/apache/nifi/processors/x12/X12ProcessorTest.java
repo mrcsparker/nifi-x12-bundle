@@ -21,6 +21,10 @@ import org.apache.nifi.util.TestRunners;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+
 
 public class X12ProcessorTest {
 
@@ -33,7 +37,20 @@ public class X12ProcessorTest {
 
     @Test
     public void testProcessor() {
-      
+        testRunner.assertValid();
+    }
+
+    @Test
+    public void testFileload() throws IOException {
+        String f = ediFile("sample-005010X222A1.837");
+        testRunner.enqueue(Paths.get(f));
+        testRunner.run();
+
+        testRunner.assertQueueEmpty();
+    }
+
+    private String ediFile(String fileName) {
+        return getClass().getClassLoader().getResource(fileName).getPath();
     }
 
 }
